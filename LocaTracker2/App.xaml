@@ -1,0 +1,8 @@
+﻿<Application
+    x:Class="LocaTracker2.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LocaTracker2"
+    RequestedTheme="Light">
+
+</Application>
