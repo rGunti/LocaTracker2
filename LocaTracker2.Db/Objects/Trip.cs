@@ -14,6 +14,6 @@ namespace LocaTracker2.Db.Objects
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public List<Point> Points { get; set; }
+        public List<TripSection> Sections { get; set; }
     }
 }

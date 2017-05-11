@@ -112,6 +112,10 @@
     <Compile Include="Migrations\20170511192612_InitialMigration.designer.cs">
       <DependentUpon>20170511192612_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20170511195226_AddedTripSectionFields.cs" />
+    <Compile Include="Migrations\20170511195226_AddedTripSectionFields.designer.cs">
+      <DependentUpon>20170511195226_AddedTripSectionFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\LocaTrackerDbContextModelSnapshot.cs" />
     <Compile Include="Objects\Point.cs" />
     <Compile Include="Objects\Trip.cs" />

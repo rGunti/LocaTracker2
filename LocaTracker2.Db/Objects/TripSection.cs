@@ -14,5 +14,15 @@ namespace LocaTracker2.Db.Objects
 
         public int TripID { get; set; }
         public Trip Trip { get; set; }
+
+        public List<Point> Points { get; set; }
+
+        public DateTime Started { get; set; }
+        public DateTime? Ended { get; set; }
+
+        public bool IsActive { get { return Ended.HasValue; } }
+        public string SectionDescription {
+            get { return $"{Started:g} - {(IsActive ? "..." : $"{Ended:g}")}"; }
+        }
     }
 }

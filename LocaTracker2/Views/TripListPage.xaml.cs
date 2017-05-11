@@ -54,5 +54,10 @@ namespace LocaTracker2.Views
                 ReloadTripList();
             }
         }
+
+        private void TripListView_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TripDetailPage), TripListView.SelectedItem);
+        }
     }
 }

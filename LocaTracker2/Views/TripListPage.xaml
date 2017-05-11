@@ -16,10 +16,15 @@
     <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}">
         <StackPanel>
             <TextBlock Text="Trips" FontSize="30" Margin="10, 5" />
-            <ListView x:Name="TripListView">
+            <ListView x:Name="TripListView"
+                      IsItemClickEnabled="True"
+                      Tapped="TripListView_Tapped"
+                      >
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
+                        <TextBlock Text="{Binding Name}"
+                                   FontSize="20"
+                                   />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

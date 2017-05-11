@@ -11,6 +11,7 @@ namespace LocaTracker2.Db
     public class LocaTrackerDbContext : DbContext
     {
         public DbSet<Trip> Trips { get; set; }
+        public DbSet<TripSection> TripSections { get; set; }
         public DbSet<Point> Points { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

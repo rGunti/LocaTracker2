@@ -1,0 +1,69 @@
+﻿<Page
+    x:Class="LocaTracker2.Views.TripDetailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LocaTracker2.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:obj="using:LocaTracker2.Db.Objects"
+    mc:Ignorable="d">
+    
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Name="DeleteTripButton"
+                          Label="Delete"
+                          Icon="Delete"
+                          Click="DeleteTripButton_ClickAsync"
+                          />
+            <AppBarButton x:Name="SaveTripButton" 
+                          Label="Save" 
+                          Icon="Save"
+                          Click="SaveTripButton_Click"
+                          />
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel Margin="10, 5">
+            <!-- Header -->
+            <TextBlock Text="Trip Detail"
+                       FontSize="30"
+                       Margin="0, 0, 0, 10"
+                       />
+            
+            <!-- Form -->
+            <TextBox x:Name="TripIDTextBox"
+                     Header="ID"
+                     Margin="0, 5"
+                     IsReadOnly="True"
+                     />
+            <TextBox x:Name="TripNameTextBox" 
+                     Header="Name"
+                     Margin="0, 5"
+                     />
+            <TextBox x:Name="TripDescriptionTextBox"
+                     Header="Description"
+                     Margin="0, 5"
+                     TextWrapping="Wrap"
+                     Height="150"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     />
+            
+            <!-- Trip Sections -->
+            <TextBlock Text="Sections" 
+                       FontWeight="Bold" 
+                       Margin="0, 10, 0, 5"
+                       />
+            <ListView x:Name="TripSectionList">
+                <!--<ListView.Items>
+                    <obj:TripSection Started="2017-02-01 01:02:03" Ended="2017-02-02 12:15:00" />
+                </ListView.Items>-->
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding SectionDescription}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+    </Grid>
+</Page>
