@@ -9,6 +9,9 @@
     Title="Processing..."
     >
     <Grid>
-        <ProgressBar IsIndeterminate="True" IsEnabled="True" Height="50" />
+        <StackPanel>
+            <TextBlock Text="This might take a while..." />
+            <ProgressRing IsActive="True" Width="100" Height="100" Margin="10" />
+        </StackPanel>
     </Grid>
 </ContentDialog>

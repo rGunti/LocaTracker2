@@ -10,7 +10,7 @@ namespace LocaTracker2.Logging
     {
         public const string DEFAULT_EXCEPTION_MESSAGE_HEADER = 
             "An exception was thrown during the applications runtime!\n" + 
-            "While this does not mean that the application will crash it can certainly a concern and should be further investigated.\n" +
+            "While this does not mean that the application will crash it can certainly be a concern and should be further investigated.\n" +
             "You can find a collection of different information about this problem below.\n" +
             "If you are a consumer of this app, please send this log with an additional report about your actions that lead to this error to the app developer so they can further investigate on this issue.\n" +
             "Application Information:\n{0}\n" +
@@ -37,7 +37,7 @@ namespace LocaTracker2.Logging
         {
             string message = string.Format(DEFAULT_EXCEPTION_FORMAT_MESSAGE, ex.GetType().FullName, ex.Message, ex.StackTrace);
             if (ex.InnerException != null) {
-                message += DEFAULT_INNER_EXCEPTION_MESSAGE + GetExceptionMessage(ex);
+                message += DEFAULT_INNER_EXCEPTION_MESSAGE + GetExceptionMessage(ex.InnerException);
             }
             return message;
         }

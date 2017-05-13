@@ -167,6 +167,14 @@
       <Project>{0bff9083-2df3-4645-85da-0a369d43120f}</Project>
       <Name>LocaTracker2.Db</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LocaTracker2.Exchange\LocaTracker2.Exchange.csproj">
+      <Project>{1fe385fa-6a5d-437e-8f95-4d43ee1d2eff}</Project>
+      <Name>LocaTracker2.Exchange</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LocaTracker2.Logging\LocaTracker2.Logging.csproj">
+      <Project>{603F2BC9-5DF2-4300-AC2A-3165E978D0B8}</Project>
+      <Name>LocaTracker2.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

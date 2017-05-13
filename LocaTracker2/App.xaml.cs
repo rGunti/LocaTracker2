@@ -1,7 +1,11 @@
 ﻿using LocaTracker2.Db;
+using LocaTracker2.Logging.ETW;
+using MetroLog;
+using MetroLog.Targets;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -32,6 +36,17 @@ namespace LocaTracker2
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            LocaTrackerEventSource.Instance.Info("App is starting up...");
+
+            LogManagerFactory.DefaultConfiguration.AddTarget(
+                LogLevel.Trace,
+                LogLevel.Fatal,
+                new FileStreamingTarget() {
+                    RetainDays = 90
+                }
+            );
+            GlobalCrashHandler.Configure();
 
             using (var db = new LocaTrackerDbContext()) {
                 db.Database.Migrate();
@@ -69,6 +84,9 @@ namespace LocaTracker2
             {
                 if (rootFrame.Content == null)
                 {
+                    EventListener evVerbose = new StorageFileEventListener("LocaTracker2_Verbose");
+                    evVerbose.EnableEvents(LocaTrackerEventSource.Instance, EventLevel.Verbose);
+
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter

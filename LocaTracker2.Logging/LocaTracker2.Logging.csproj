@@ -108,6 +108,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
+    <Compile Include="ETW\LocaTrackerEventSource.cs" />
+    <Compile Include="ETW\StorageFileEventListener.cs" />
     <Compile Include="LoggingUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\LocaTracker.Logging.rd.xml" />
