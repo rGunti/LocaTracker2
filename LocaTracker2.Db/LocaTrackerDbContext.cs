@@ -1,4 +1,6 @@
-﻿using LocaTracker2.Db.Objects;
+﻿using LocaTracker.Logging;
+using LocaTracker2.Db.Objects;
+using MetroLog;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,8 @@ namespace LocaTracker2.Db
 {
     public class LocaTrackerDbContext : DbContext
     {
+        static ILogger log = LogManagerFactory.DefaultLogManager.GetLogger<LocaTrackerDbContext>();
+
         public DbSet<Trip> Trips { get; set; }
         public DbSet<TripSection> TripSections { get; set; }
         public DbSet<Point> Points { get; set; }
@@ -21,8 +25,17 @@ namespace LocaTracker2.Db
 
         public static void InitDatabase()
         {
+            log.Debug("Database is being initialized...");
             using (var db = new LocaTrackerDbContext()) {
-                db.Database.Migrate();
+                log.Trace("Database migration in progress...");
+                try {
+                    db.Database.Migrate();
+                } catch (Exception ex) {
+                    log.Fatal("Error white migrating database file. More information about this error below.");
+                    log.Fatal(LoggingUtilities.GetExceptionMessage(ex));
+                    log.Warn("The error will be thrown again so the app crashes!");
+                    throw ex;
+                }
             }
         }
     }

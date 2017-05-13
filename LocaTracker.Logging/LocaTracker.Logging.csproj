@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0BFF9083-2DF3-4645-85DA-0A369D43120F}</ProjectGuid>
+    <ProjectGuid>{603F2BC9-5DF2-4300-AC2A-3165E978D0B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LocaTracker2.Db</RootNamespace>
-    <AssemblyName>LocaTracker2.Db</AssemblyName>
+    <RootNamespace>LocaTracker.Logging</RootNamespace>
+    <AssemblyName>LocaTracker.Logging</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.14393.0</TargetPlatformVersion>
@@ -107,27 +107,10 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LocaTrackerDbContext.cs" />
-    <Compile Include="Migrations\20170511192612_InitialMigration.cs" />
-    <Compile Include="Migrations\20170511192612_InitialMigration.designer.cs">
-      <DependentUpon>20170511192612_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20170511195226_AddedTripSectionFields.cs" />
-    <Compile Include="Migrations\20170511195226_AddedTripSectionFields.designer.cs">
-      <DependentUpon>20170511195226_AddedTripSectionFields.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\LocaTrackerDbContextModelSnapshot.cs" />
-    <Compile Include="Objects\Point.cs" />
-    <Compile Include="Objects\Trip.cs" />
-    <Compile Include="Objects\TripSection.cs" />
+    <Compile Include="AppInfo.cs" />
+    <Compile Include="LoggingUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\LocaTracker2.Db.rd.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LocaTracker.Logging\LocaTracker.Logging.csproj">
-      <Project>{603F2BC9-5DF2-4300-AC2A-3165E978D0B8}</Project>
-      <Name>LocaTracker.Logging</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Properties\LocaTracker.Logging.rd.xml" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
