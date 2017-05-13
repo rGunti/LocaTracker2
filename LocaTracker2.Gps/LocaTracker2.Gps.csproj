@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GpsTracker.cs" />
     <Compile Include="GpsUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\LocaTracker2.Gps.rd.xml" />
