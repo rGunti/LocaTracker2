@@ -7,8 +7,8 @@
     <ProjectGuid>{603F2BC9-5DF2-4300-AC2A-3165E978D0B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LocaTracker.Logging</RootNamespace>
-    <AssemblyName>LocaTracker.Logging</AssemblyName>
+    <RootNamespace>LocaTracker2.Logging</RootNamespace>
+    <AssemblyName>LocaTracker2.Logging</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.14393.0</TargetPlatformVersion>

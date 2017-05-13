@@ -2,7 +2,7 @@
 using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.System.Profile;
 
-namespace LocaTracker.Logging
+namespace LocaTracker2.Logging
 {
     public static class AppInfo
     {

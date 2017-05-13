@@ -1,4 +1,4 @@
-﻿using LocaTracker.Logging;
+﻿using LocaTracker2.Logging;
 using LocaTracker2.Db.Objects;
 using MetroLog;
 using Microsoft.EntityFrameworkCore;

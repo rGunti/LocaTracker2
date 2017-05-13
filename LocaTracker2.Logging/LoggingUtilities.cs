@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LocaTracker.Logging
+namespace LocaTracker2.Logging
 {
     public static class LoggingUtilities
     {
