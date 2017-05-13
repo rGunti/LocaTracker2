@@ -80,6 +80,9 @@ namespace LocaTracker2.Exchange.Import
 
                 LocaTrackerEventSource.Instance.Info($"Parsed {section.Points.Count} point(s) from {file.Path}");
 
+                section.Started = section.Points.Min(p => p.Timestamp);
+                section.Ended = section.Points.Max(p => p.Timestamp);
+
                 if (!importFailed) {
                     LocaTrackerEventSource.Instance.Info($"Saving changes...");
                     try {

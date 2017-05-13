@@ -108,13 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LocaTrackerDbContext.cs" />
-    <Compile Include="Migrations\20170511192612_InitialMigration.cs" />
-    <Compile Include="Migrations\20170511192612_InitialMigration.designer.cs">
-      <DependentUpon>20170511192612_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20170511195226_AddedTripSectionFields.cs" />
-    <Compile Include="Migrations\20170511195226_AddedTripSectionFields.designer.cs">
-      <DependentUpon>20170511195226_AddedTripSectionFields.cs</DependentUpon>
+    <Compile Include="Migrations\20170513214507_InitialMigration.cs" />
+    <Compile Include="Migrations\20170513214507_InitialMigration.designer.cs">
+      <DependentUpon>20170513214507_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\LocaTrackerDbContextModelSnapshot.cs" />
     <Compile Include="Objects\Point.cs" />
@@ -129,6 +125,7 @@
       <Name>LocaTracker2.Logging</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

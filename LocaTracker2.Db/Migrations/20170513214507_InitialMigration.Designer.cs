@@ -8,8 +8,8 @@ using LocaTracker2.Db;
 namespace LocaTracker2.Db.Migrations
 {
     [DbContext(typeof(LocaTrackerDbContext))]
-    [Migration("20170511195226_AddedTripSectionFields")]
-    partial class AddedTripSectionFields
+    [Migration("20170513214507_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,13 +37,9 @@ namespace LocaTracker2.Db.Migrations
 
                     b.Property<DateTime>("Timestamp");
 
-                    b.Property<int?>("TripID");
-
                     b.Property<int>("TripSectionID");
 
                     b.HasKey("PointID");
-
-                    b.HasIndex("TripID");
 
                     b.HasIndex("TripSectionID");
 
@@ -79,17 +75,13 @@ namespace LocaTracker2.Db.Migrations
 
                     b.HasIndex("TripID");
 
-                    b.ToTable("TripSection");
+                    b.ToTable("TripSections");
                 });
 
             modelBuilder.Entity("LocaTracker2.Db.Objects.Point", b =>
                 {
-                    b.HasOne("LocaTracker2.Db.Objects.Trip")
-                        .WithMany("Points")
-                        .HasForeignKey("TripID");
-
                     b.HasOne("LocaTracker2.Db.Objects.TripSection", "TripSection")
-                        .WithMany()
+                        .WithMany("Points")
                         .HasForeignKey("TripSectionID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -97,7 +89,7 @@ namespace LocaTracker2.Db.Migrations
             modelBuilder.Entity("LocaTracker2.Db.Objects.TripSection", b =>
                 {
                     b.HasOne("LocaTracker2.Db.Objects.Trip", "Trip")
-                        .WithMany()
+                        .WithMany("Sections")
                         .HasForeignKey("TripID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
