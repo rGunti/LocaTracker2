@@ -8,9 +8,10 @@ using LocaTracker2.Db;
 namespace LocaTracker2.Db.Migrations
 {
     [DbContext(typeof(LocaTrackerDbContext))]
-    partial class LocaTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170514195749_AddedSectionDistanceToDb")]
+    partial class AddedSectionDistanceToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2");
