@@ -38,5 +38,12 @@ namespace LocaTracker2.Db
                 }
             }
         }
+
+        public static LocaTrackerDbContext GetNonTrackingInstance()
+        {
+            LocaTrackerDbContext ctx = new LocaTrackerDbContext();
+            ctx.ChangeTracker.AutoDetectChangesEnabled = false;
+            return ctx;
+        }
     }
 }

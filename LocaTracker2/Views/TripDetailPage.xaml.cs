@@ -51,9 +51,9 @@ namespace LocaTracker2.Views
             TripDescriptionTextBox.Text = editorTrip.Description;
 
             Task.Run(async () => {
-                using (var db = new LocaTrackerDbContext()) {
+                using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
                     IEnumerable<TripSection> sections = db.TripSections.Where(s => s.TripID == editorTrip.TripID).ToList();
-                    foreach (TripSection section in sections) {
+                    foreach (TripSection section in sections.Where(s => s.IsActive)) {
                         section.CalculateSectionDistance();
                     }
                     await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
@@ -72,10 +72,12 @@ namespace LocaTracker2.Views
             var processingDialog = new ProcessingDialog();
             processingDialog.ShowAsync();
             Task.Run(async () => {
-                using (var db = new LocaTrackerDbContext()) {
+                using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
                     Trip editorTrip = db.Trips.First(t => t.TripID == this.editorTrip.TripID);
                     editorTrip.Name = tripName;
                     editorTrip.Description = tripDescription;
+
+                    db.Update(editorTrip);
                     db.SaveChanges();
 
                     await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
@@ -93,7 +95,7 @@ namespace LocaTracker2.Views
                 processingDialog.ShowAsync();
                 await Task.Run(async () => {
                     using (var db = new LocaTrackerDbContext()) {
-                        db.Trips.Remove(editorTrip);
+                        db.Remove(editorTrip);
                         db.SaveChanges();
                     }
 
