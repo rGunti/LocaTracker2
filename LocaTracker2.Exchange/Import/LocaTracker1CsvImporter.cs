@@ -22,20 +22,23 @@ namespace LocaTracker2.Exchange.Import
             LocaTrackerEventSource.Instance.Verbose($"Importing from {file.Path}...");
             IList<string> lines = await FileIO.ReadLinesAsync(file);
 
-            using (var db = new LocaTrackerDbContext()) {
+            using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
                 Trip trip = new Trip() {
                     Name = System.IO.Path.GetFileNameWithoutExtension(file.Path),
                     Description = $"Imported from LocaTracker 1 using \"{file.Path}\"",
                     Sections = new List<TripSection>()
                 };
+                var tripEntity = db.Add(trip);
+
                 TripSection section = new TripSection() {
-                    Trip = trip,
+                    TripID = tripEntity.Entity.TripID,
                     Points = new List<Point>()
                 };
-                trip.Sections.Add(section);
-                db.Trips.Add(trip);
-
+                var sectionEntity = db.Add(section);
+                
                 int lineCounter = 0;
+                double distance = 0;
+                Point lastPoint = null;
                 foreach (var line in lines) {
                     lineCounter++;
                     // Ignore first and last line
@@ -72,16 +75,30 @@ namespace LocaTracker2.Exchange.Import
                         Speed = speed,
                         Heading = heading,
 
-                        TripSection = section
+                        TripSectionID = sectionEntity.Entity.TripSectionID
                     };
+
+                    if (lastPoint != null) {
+                        distance += Point.CalculateDistance(lastPoint, point);
+                    }
+                    lastPoint = point;
+
                     LocaTrackerEventSource.Instance.Verbose($"Created Point {trip.Name}, #{lineCounter}, {point.Timestamp:yyyy-MM-dd HH:mm:ss}");
-                    db.Points.Add(point);
+                    db.Add(point);
                 }
 
                 LocaTrackerEventSource.Instance.Info($"Parsed {section.Points.Count} point(s) from {file.Path}");
 
-                section.Started = section.Points.Min(p => p.Timestamp);
-                section.Ended = section.Points.Max(p => p.Timestamp);
+                sectionEntity.Entity.Started = section.Points.Min(p => p.Timestamp);
+                sectionEntity.Entity.Ended = section.Points.Max(p => p.Timestamp);
+                sectionEntity.Entity.StoredSectionDistance = distance;
+                try {
+                    db.Update(sectionEntity.Entity);
+                } catch (Exception ex) {
+                    LocaTrackerEventSource.Instance.Error(LoggingUtilities.GetExceptionMessage(ex));
+                    Result = ImportResult.Failed;
+                    ErrorCauseByException = ex;
+                }
 
                 if (!importFailed) {
                     LocaTrackerEventSource.Instance.Info($"Saving changes...");
