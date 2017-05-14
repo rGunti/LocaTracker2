@@ -109,5 +109,10 @@ namespace LocaTracker2.Views
                 RunImporter(new LocaTracker1CsvImporter(), importLC1File);
             }
         }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsPage), this);
+        }
     }
 }

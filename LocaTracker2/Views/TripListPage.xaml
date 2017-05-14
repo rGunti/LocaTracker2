@@ -13,6 +13,8 @@
             <AppBarButton Label="Add" Icon="Add" Click="AppBarButton_Click" />
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="ImportFromLC1Button" Label="Import from LocaTracker 1" Icon="OpenWith" Click="ImportFromLC1Button_Click" />
+                <AppBarSeparator />
+                <AppBarButton x:Name="SettingsButton" Label="Settings" Icon="Setting" Click="SettingsButton_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

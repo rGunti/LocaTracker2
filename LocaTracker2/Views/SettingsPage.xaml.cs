@@ -27,9 +27,25 @@ namespace LocaTracker2.Views
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
+        private Type navigatedFrom;
+
         public SettingsPage()
         {
             this.InitializeComponent();
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            SystemNavigationManager.GetForCurrentView().BackRequested += SettingsPage_BackRequested;
+        }
+
+        private void SettingsPage_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            Frame.Navigate(navigatedFrom);
+            SystemNavigationManager.GetForCurrentView().BackRequested -= SettingsPage_BackRequested;
+            e.Handled = true;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            navigatedFrom = e.Parameter.GetType();
         }
 
         private void ExecuteMaintenanceTask(BaseMaintenanceTask maintTask)
