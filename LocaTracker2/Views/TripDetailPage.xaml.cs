@@ -49,12 +49,18 @@ namespace LocaTracker2.Views
             TripIDTextBox.Text = editorTrip.TripID.ToString();
             TripNameTextBox.Text = editorTrip.Name;
             TripDescriptionTextBox.Text = editorTrip.Description;
-            
+
             Task.Run(async () => {
-                IEnumerable<TripSection> sections = editorTrip.Sections;
-                await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
-                    TripSectionList.ItemsSource = sections;
-                });
+                using (var db = new LocaTrackerDbContext()) {
+                    IEnumerable<TripSection> sections = db.TripSections.Where(s => s.TripID == editorTrip.TripID).ToList();
+                    foreach (TripSection section in sections) {
+                        section.CalculateSectionDistance();
+                    }
+                    await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
+                        TripSectionList.ItemsSource = sections;
+                        LoadingTripSectionsProgressBar.Visibility = Visibility.Collapsed;
+                    });
+                }
             });
         }
 
@@ -80,7 +86,7 @@ namespace LocaTracker2.Views
             });
         }
 
-        private async void DeleteTripButton_ClickAsync(object sender, RoutedEventArgs e)
+        private async void DeleteTripButton_Click(object sender, RoutedEventArgs e)
         {
             if (await new DeleteTripDialog(editorTrip).ShowAsync() == ContentDialogResult.Primary) {
                 var processingDialog = new ProcessingDialog();

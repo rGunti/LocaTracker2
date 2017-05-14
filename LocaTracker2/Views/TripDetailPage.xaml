@@ -13,7 +13,7 @@
             <AppBarButton x:Name="DeleteTripButton"
                           Label="Delete"
                           Icon="Delete"
-                          Click="DeleteTripButton_ClickAsync"
+                          Click="DeleteTripButton_Click"
                           />
             <AppBarButton x:Name="SaveTripButton" 
                           Label="Save" 
@@ -51,16 +51,47 @@
             
             <!-- Trip Sections -->
             <TextBlock Text="Sections" 
-                       FontWeight="Bold" 
+                       FontSize="25"
                        Margin="0, 10, 0, 5"
                        />
-            <ListView x:Name="TripSectionList">
-                <!--<ListView.Items>
-                    <obj:TripSection Started="2017-02-01 01:02:03" Ended="2017-02-02 12:15:00" />
-                </ListView.Items>-->
+            <ProgressBar x:Name="LoadingTripSectionsProgressBar" IsIndeterminate="True" />
+            <ListView x:Name="TripSectionList"
+                      HorizontalContentAlignment="Stretch"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      >
+                
+                <ListView.Items>
+                    <obj:TripSection />
+                </ListView.Items>
+                
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding SectionDescription}" />
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="40" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding SectionDescription}" 
+                                       Grid.Row="0"
+                                       Grid.RowSpan="2"
+                                       TextAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       />
+                            <TextBlock Text="{Binding SectionDistanceString}"
+                                       FontSize="10"
+                                       Grid.Column="1"
+                                       TextAlignment="Right"
+                                       />
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

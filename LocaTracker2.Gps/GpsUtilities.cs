@@ -42,6 +42,24 @@ namespace LocaTracker2.Gps
         }
 
         /// <summary>
+        /// Contains functions to convert distances to human readable text
+        /// </summary>
+        public static class HumanReadableConverter
+        {
+            public static string GetMetricDistance(double distance, bool withUnit = false, string unitDelimiter = " ")
+            {
+                if (distance < 1000) return $"{distance:0.00}{(withUnit ? (unitDelimiter + "m") : "")}";
+                else return $"{(distance / 1000):0.00}{(withUnit ? (unitDelimiter + "km") : "")}";
+            }
+
+            public static string GetImperialDistance(double distance, bool withUnit = false, string unitDelimiter = " ")
+            {
+                if (distance < 1760) return $"{distance:0.00}{(withUnit ? (unitDelimiter + "yd") : "")}";
+                else return $"{(distance / 1760):0.00}{(withUnit ? (unitDelimiter + "mi") : "")}";
+            }
+        }
+
+        /// <summary>
         /// Converts Speed in Kilometers per Hour [km/h] to Meters per Second [m/s]
         /// </summary>
         public static double ConvertKMHtoMPS(double kmh) { return kmh / 3.6; }

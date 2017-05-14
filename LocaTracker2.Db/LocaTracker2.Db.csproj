@@ -120,6 +120,10 @@
     <EmbeddedResource Include="Properties\LocaTracker2.Db.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LocaTracker2.Gps\LocaTracker2.Gps.csproj">
+      <Project>{881F4388-9BE3-4324-9A73-974E5B3BF02A}</Project>
+      <Name>LocaTracker2.Gps</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LocaTracker2.Logging\LocaTracker2.Logging.csproj">
       <Project>{603F2BC9-5DF2-4300-AC2A-3165E978D0B8}</Project>
       <Name>LocaTracker2.Logging</Name>

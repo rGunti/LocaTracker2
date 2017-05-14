@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocaTracker2.Gps;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -28,5 +29,13 @@ namespace LocaTracker2.Db.Objects
         public double Altitude { get; set; }
 
         public double Speed { get; set; }
+
+        public static double CalculateDistance(Point a, Point b)
+        {
+            return GpsUtilities.GetDistanceBetweenTwoPoints(
+                a.Latitude, a.Longitude,
+                b.Latitude, b.Longitude
+            );
+        }
     }
 }
