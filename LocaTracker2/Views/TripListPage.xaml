@@ -19,20 +19,23 @@
         </CommandBar>
     </Page.BottomAppBar>
     <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}">
-        <StackPanel>
-            <TextBlock Text="Trips" FontSize="30" Margin="10, 5" />
-            <ListView x:Name="TripListView"
-                      IsItemClickEnabled="True"
-                      Tapped="TripListView_Tapped"
-                      >
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"
-                                   FontSize="20"
-                                   />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
+        <Pivot Title="LocaTracker 2">
+            <PivotItem Header="Trips">
+                <ListView x:Name="TripListView"
+                    IsItemClickEnabled="True"
+                    Tapped="TripListView_Tapped"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"
+                                FontSize="20"
+                                />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </PivotItem>
+        </Pivot>
     </Grid>
 </Page>

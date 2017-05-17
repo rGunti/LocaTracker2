@@ -77,15 +77,19 @@ namespace LocaTracker2.Views
             await Task.Run(async () => {
                 await importer.DoImport(file);
 
+                string resultMessage;
                 if (importer.Result == ImportResult.Success) {
-                    await new MessageDialog("File Import completed", "Import").ShowAsync();
+                    resultMessage = "File Import completed";
                 } else if (importer.ErrorCauseByException != null) {
-                    await new MessageDialog(LoggingUtilities.GetExceptionMessage(importer.ErrorCauseByException), "Import").ShowAsync();
+                    resultMessage = LoggingUtilities.GetExceptionMessage(importer.ErrorCauseByException);
                 } else {
-                    await new MessageDialog("File Import failed!", "Import").ShowAsync();
+                    resultMessage = "File Import failed!";
                 }
 
                 await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
+#pragma warning disable CS4014
+                    new MessageDialog(resultMessage, "Import").ShowAsync();
+#pragma warning restore CS4014
                     processingDialog.Hide();
                     ReloadTripList();
                 });

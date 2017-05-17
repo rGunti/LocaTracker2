@@ -106,8 +106,6 @@ namespace LocaTracker2.Views
             }
         }
 
-        private void TripSectionsHubSection_Loading(FrameworkElement sender, object args) { }
-
         private void TripPropertyTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;

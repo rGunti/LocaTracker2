@@ -83,7 +83,7 @@ namespace LocaTracker2.Exchange.Import
                     }
                     lastPoint = point;
 
-                    LocaTrackerEventSource.Instance.Verbose($"Created Point {trip.Name}, #{lineCounter}, {point.Timestamp:yyyy-MM-dd HH:mm:ss}");
+                    //LocaTrackerEventSource.Instance.Verbose($"Created Point {trip.Name}, #{lineCounter}, {point.Timestamp:yyyy-MM-dd HH:mm:ss}");
                     db.Add(point);
                 }
 

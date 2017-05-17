@@ -24,9 +24,9 @@
     </Page.BottomAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Pivot>
-            <PivotItem Header="Trip Detail">
-                <StackPanel MaxWidth="350">
+        <Pivot Title="Trip Detail">
+            <PivotItem Header="General Info">
+                <StackPanel>
                     <TextBox x:Name="TripIDTextBox"
                              Header="ID"
                              Text="{Binding TripID}"

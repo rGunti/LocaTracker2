@@ -8,32 +8,28 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Hub Header="Settings">
-            <HubSection Header="Maintenance">
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="Distance recalculation"
-                                   />
-                        <TextBlock Text="This maintenance job recalculates all completed Trip Section distances and writes them to the database file."
-                                   TextWrapping="WrapWholeWords"
-                                   MaxWidth="250"
-                                   FontSize="12"
-                                   />
-                        <TextBlock Text="To prevent data loss, do not run this job during a recording."
-                                   TextWrapping="WrapWholeWords"
-                                   MaxWidth="250"
-                                   FontSize="12"
-                                   Margin="0,5,0,0"
-                                   />
+        <Pivot Title="Settings">
+            <PivotItem Header="Maint. Tasks">
+                <StackPanel>
+                    <TextBlock Text="Distance recalculation"
+                               />
+                    <TextBlock Text="This maintenance job recalculates all completed Trip Section distances and writes them to the database file."
+                               TextWrapping="WrapWholeWords"
+                               FontSize="12"
+                               />
+                    <TextBlock Text="To prevent data loss, do not run this job during a recording."
+                               TextWrapping="WrapWholeWords"
+                               FontSize="12"
+                               Margin="0,5,0,0"
+                               />
 
-                        <Button x:Name="ExecuteMaintRecalculation"
-                                Content="Run Recalculation"
-                                Margin="5"
-                                Click="ExecuteMaintRecalculation_Click"
-                                />
-                    </StackPanel>
-                </DataTemplate>
-            </HubSection>
-        </Hub>
+                    <Button x:Name="ExecuteMaintRecalculation"
+                            Content="Run Recalculation"
+                            Margin="5"
+                            Click="ExecuteMaintRecalculation_Click"
+                            />
+                </StackPanel>
+            </PivotItem>
+        </Pivot>
     </Grid>
 </Page>
