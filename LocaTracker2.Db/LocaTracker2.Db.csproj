@@ -117,6 +117,7 @@
       <DependentUpon>20170514195749_AddedSectionDistanceToDb.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\LocaTrackerDbContextModelSnapshot.cs" />
+    <Compile Include="Objects\BaseNotifyPropertyChange.cs" />
     <Compile Include="Objects\Point.cs" />
     <Compile Include="Objects\Trip.cs" />
     <Compile Include="Objects\TripSection.cs" />

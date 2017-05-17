@@ -46,9 +46,10 @@ namespace LocaTracker2.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             editorTrip = e.Parameter as Trip;
-            TripIDTextBox.Text = editorTrip.TripID.ToString();
-            TripNameTextBox.Text = editorTrip.Name;
-            TripDescriptionTextBox.Text = editorTrip.Description;
+            this.DataContext = editorTrip;
+            //TripIDTextBox.Text = editorTrip.TripID.ToString();
+            //TripNameTextBox.Text = editorTrip.Name;
+            //TripDescriptionTextBox.Text = editorTrip.Description;
 
             Task.Run(async () => {
                 using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
@@ -57,8 +58,9 @@ namespace LocaTracker2.Views
                         section.CalculateSectionDistance();
                     }
                     await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
+                        //editorTrip.Sections = sections.ToList();
                         TripSectionList.ItemsSource = sections;
-                        LoadingTripSectionsProgressBar.Visibility = Visibility.Collapsed;
+                        //LoadingTripSectionsProgressBar.Visibility = Visibility.Collapsed;
                     });
                 }
             });
@@ -66,16 +68,13 @@ namespace LocaTracker2.Views
 
         private void SaveTripButton_Click(object sender, RoutedEventArgs e)
         {
-            string tripName = TripNameTextBox.Text.Trim();
-            string tripDescription = TripDescriptionTextBox.Text.Trim();
-
             var processingDialog = new ProcessingDialog();
             processingDialog.ShowAsync();
             Task.Run(async () => {
                 using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
                     Trip editorTrip = db.Trips.First(t => t.TripID == this.editorTrip.TripID);
-                    editorTrip.Name = tripName;
-                    editorTrip.Description = tripDescription;
+                    editorTrip.Name = this.editorTrip.Name;
+                    editorTrip.Description = this.editorTrip.Description;
 
                     db.Update(editorTrip);
                     db.SaveChanges();
@@ -105,6 +104,14 @@ namespace LocaTracker2.Views
                     });
                 });
             }
+        }
+
+        private void TripSectionsHubSection_Loading(FrameworkElement sender, object args) { }
+
+        private void TripPropertyTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            editorTrip.Set(textBox.Tag.ToString(), textBox.Text);
         }
     }
 }

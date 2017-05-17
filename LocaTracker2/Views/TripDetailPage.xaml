@@ -24,77 +24,72 @@
     </Page.BottomAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel Margin="10, 5">
-            <!-- Header -->
-            <TextBlock Text="Trip Detail"
-                       FontSize="30"
-                       Margin="0, 0, 0, 10"
-                       />
-            
-            <!-- Form -->
-            <TextBox x:Name="TripIDTextBox"
-                     Header="ID"
-                     Margin="0, 5"
-                     IsReadOnly="True"
-                     />
-            <TextBox x:Name="TripNameTextBox" 
-                     Header="Name"
-                     Margin="0, 5"
-                     />
-            <TextBox x:Name="TripDescriptionTextBox"
-                     Header="Description"
-                     Margin="0, 5"
-                     TextWrapping="Wrap"
-                     Height="150"
-                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                     />
-            
-            <!-- Trip Sections -->
-            <TextBlock Text="Sections" 
-                       FontSize="25"
-                       Margin="0, 10, 0, 5"
-                       />
-            <ProgressBar x:Name="LoadingTripSectionsProgressBar" IsIndeterminate="True" />
-            <ListView x:Name="TripSectionList"
-                      HorizontalContentAlignment="Stretch"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      >
-                
-                <ListView.Items>
-                    <obj:TripSection />
-                </ListView.Items>
-                
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid HorizontalAlignment="Stretch">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="40" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding SectionDescription}" 
-                                       Grid.Row="0"
-                                       Grid.RowSpan="2"
-                                       TextAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       />
-                            <TextBlock Text="{Binding SectionDistanceString}"
-                                       FontSize="10"
-                                       Grid.Column="1"
-                                       TextAlignment="Right"
-                                       />
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
+        <Pivot>
+            <PivotItem Header="Trip Detail">
+                <StackPanel MaxWidth="350">
+                    <TextBox x:Name="TripIDTextBox"
+                             Header="ID"
+                             Text="{Binding TripID}"
+                             Margin="0, 5"
+                             IsReadOnly="True"
+                             />
+                    <TextBox x:Name="TripNameTextBox" 
+                             Header="Name"
+                             Text="{Binding Name}"
+                             Tag="Name"
+                             Margin="0, 5"
+                             TextChanged="TripPropertyTextBox_TextChanged"
+                             />
+                    <TextBox x:Name="TripDescriptionTextBox"
+                             Header="Description"
+                             Text="{Binding Description}"
+                             Tag="Description"
+                             Margin="0, 5"
+                             TextWrapping="Wrap"
+                             Height="150"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             TextChanged="TripPropertyTextBox_TextChanged"
+                             />
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="Sections">
+                <ListView x:Name="TripSectionList"
+                              HorizontalContentAlignment="Stretch"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              DataContext="{Binding Sections}"
+                              >
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="40" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding SectionDescription}" 
+                                           Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           TextAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           />
+                                <TextBlock Text="{Binding SectionDistanceString}"
+                                           FontSize="10"
+                                           Grid.Column="1"
+                                           TextAlignment="Right"
+                                           />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </PivotItem>
+        </Pivot>
     </Grid>
 </Page>

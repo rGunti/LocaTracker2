@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LocaTracker2.Db.Objects
 {
-    public class Trip
+    public class Trip : BaseNotifyPropertyChange
     {
-        [Key]
-        public int TripID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        private int tripId;
+        private string name;
+        private string description;
+        private List<TripSection> sections;
 
-        public List<TripSection> Sections { get; set; }
+        [Key]
+        public int TripID { get { return tripId; } set { tripId = value; RaisePropertyChanged(); } }
+        public string Name { get { return name; } set { name = value; RaisePropertyChanged(); } }
+        public string Description { get { return description; } set { description = value; RaisePropertyChanged(); } }
+
+        public List<TripSection> Sections { get { return sections; } set { sections = value; RaisePropertyChanged(); } }
     }
 }
