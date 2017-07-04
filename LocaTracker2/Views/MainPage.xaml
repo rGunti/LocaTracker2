@@ -41,10 +41,18 @@
     </Page.BottomAppBar>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90" />
+            <RowDefinition />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
+
         <!-- CENTER -->
         <Viewbox Margin="10,0"
                  HorizontalAlignment="Center"
-                 VerticalAlignment="Center">
+                 VerticalAlignment="Center"
+                 Grid.Row="1"
+                 >
             <StackPanel>
                 <TextBlock x:Name="SpeedLabel"
                            Text="  0"
@@ -97,7 +105,8 @@
         
         <!-- TOP -->
         <Grid Margin="10,10,10,10"
-              VerticalAlignment="Top">
+              VerticalAlignment="Top"
+              Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20*" />
                 <ColumnDefinition Width="10*" />
@@ -163,7 +172,8 @@
 
         <!-- BOTTOM -->
         <Grid Margin="10,0,10,10"
-              VerticalAlignment="Bottom">
+              VerticalAlignment="Bottom"
+              Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
