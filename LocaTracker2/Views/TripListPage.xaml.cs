@@ -66,6 +66,7 @@ namespace LocaTracker2.Views
 
         private void TripListView_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            if (TripListView.SelectedItem == null) { return; }
             Frame.Navigate(typeof(TripDetailPage), TripListView.SelectedItem);
         }
 
