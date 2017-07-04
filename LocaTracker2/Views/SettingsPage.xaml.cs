@@ -1,4 +1,5 @@
-﻿using LocaTracker2.Settings.MaintenanceTask;
+﻿using LocaTracker2.Settings;
+using LocaTracker2.Settings.MaintenanceTask;
 using LocaTracker2.Views.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,16 @@ namespace LocaTracker2.Views
         private void ExecuteMaintRecalculation_Click(object sender, RoutedEventArgs e)
         {
             ExecuteMaintenanceTask(new DistanceRecalculationTask());
+        }
+
+        private void UseImperialUnits_Loading(FrameworkElement sender, object args)
+        {
+            ((ToggleSwitch)sender).IsOn = UnitSettingsReader.Instance.UseImperialUnits;
+        }
+
+        private void UseImperialUnits_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+            UnitSettingsReader.Instance.UseImperialUnits = ((ToggleSwitch)sender).IsOn;
         }
     }
 }

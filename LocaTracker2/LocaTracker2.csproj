@@ -99,6 +99,8 @@
     </Compile>
     <Compile Include="Settings\MaintenanceTask\BaseMaintenanceTask.cs" />
     <Compile Include="Settings\MaintenanceTask\DistanceRecalculationTask.cs" />
+    <Compile Include="Settings\SettingsReader.cs" />
+    <Compile Include="Settings\UnitSettingsReader.cs" />
     <Compile Include="Views\Dialogs\CreateTripDialog.xaml.cs">
       <DependentUpon>CreateTripDialog.xaml</DependentUpon>
     </Compile>

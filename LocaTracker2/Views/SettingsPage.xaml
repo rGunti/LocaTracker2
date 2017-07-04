@@ -9,6 +9,26 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Pivot Title="Settings">
+            <PivotItem Header="Units">
+                <StackPanel>
+                    <TextBlock Text="Unit Preferation"
+                             />
+                    <TextBlock Text="Select the unit which you want to have displayed preferrably."
+                               TextWrapping="WrapWholeWords"
+                               FontSize="12"
+                               />
+                    <TextBlock Text="Please note that data will always be recorded in metric and converted to imperial if needed. Internal data (like accuracy) will always be represented in metrical units."
+                               TextWrapping="WrapWholeWords"
+                               FontSize="12"
+                               />
+                    <ToggleSwitch x:Name="UseImperialUnits"
+                                  OffContent="Use Metrical Units (km, km/h)" 
+                                  OnContent="Use Imperial Units (mi, mph)"
+                                  Loading="UseImperialUnits_Loading"
+                                  ManipulationCompleted="UseImperialUnits_ManipulationCompleted"
+                                  />
+                </StackPanel>
+            </PivotItem>
             <PivotItem Header="Maint. Tasks">
                 <StackPanel>
                     <TextBlock Text="Distance recalculation"

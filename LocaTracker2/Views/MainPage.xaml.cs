@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocaTracker2.Settings;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +23,12 @@ namespace LocaTracker2.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private UnitSettingsReader unitSettings;
+
         public MainPage()
         {
             this.InitializeComponent();
+            unitSettings = UnitSettingsReader.Instance;
         }
 
         private void TripsButton_Click(object sender, RoutedEventArgs e)
@@ -35,6 +39,16 @@ namespace LocaTracker2.Views
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(SettingsPage), this);
+        }
+
+        private void Page_Loading(FrameworkElement sender, object args)
+        {
+            bool useImperialUnits = unitSettings.UseImperialUnits;
+
+            SpeedUnitLabel.Text = (useImperialUnits) ? "mph" : "km/h";
+            AlternativeUnitSpeedUnitLabel.Text = (useImperialUnits) ? "km/h" : "mph";
+            AltitudeUnitLabel.Text = (useImperialUnits) ? "ft" : "m";
+            DistanceUnitLabel.Text = (useImperialUnits) ? "mi" : "km";
         }
     }
 }
