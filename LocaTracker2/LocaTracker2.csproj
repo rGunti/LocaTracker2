@@ -90,6 +90,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Assets\Fonts\DigitalCounter7.ttf" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -131,6 +132,13 @@
     <None Include="LocaTracker2_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Icons\Battery\battery0.png" />
+    <Content Include="Assets\Icons\Battery\battery1.png" />
+    <Content Include="Assets\Icons\Battery\battery2.png" />
+    <Content Include="Assets\Icons\Battery\battery3.png" />
+    <Content Include="Assets\Icons\Battery\battery4.png" />
+    <Content Include="Assets\Icons\Battery\batteryC.png" />
+    <Content Include="Assets\Icons\Battery\batteryN.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

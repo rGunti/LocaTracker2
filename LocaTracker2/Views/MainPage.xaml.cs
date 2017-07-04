@@ -26,5 +26,15 @@ namespace LocaTracker2.Views
         {
             this.InitializeComponent();
         }
+
+        private void TripsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TripListPage));
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsPage), this);
+        }
     }
 }

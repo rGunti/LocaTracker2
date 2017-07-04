@@ -36,6 +36,15 @@ namespace LocaTracker2.Views
         public TripListPage()
         {
             this.InitializeComponent();
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            SystemNavigationManager.GetForCurrentView().BackRequested += TripListPage_BackRequested;
+        }
+
+        private void TripListPage_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            Frame.Navigate(typeof(MainPage));
+            SystemNavigationManager.GetForCurrentView().BackRequested -= TripListPage_BackRequested;
+            e.Handled = true;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
