@@ -1,5 +1,6 @@
 ﻿using LocaTracker2.Db;
 using LocaTracker2.Logging.ETW;
+using LocaTracker2.Logic;
 using MetroLog;
 using MetroLog.Targets;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +52,8 @@ namespace LocaTracker2
             using (var db = new LocaTrackerDbContext()) {
                 db.Database.Migrate();
             }
+
+            GpsRecorder.Instance.InitAsync();
         }
 
         /// <summary>

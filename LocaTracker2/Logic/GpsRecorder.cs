@@ -18,7 +18,7 @@ namespace LocaTracker2.Logic
 
         public LocaTrackerDbContext dbContext = new LocaTrackerDbContext();
 
-        public Point CurrentPosition { get; protected set; } = new Point();
+        public Point CurrentPosition { get; protected set; } = null;
         public TripSection CurrentRecordingTripSection { get; protected set; }
         public Trip CurrentRecordingTrip { get; protected set; }
 

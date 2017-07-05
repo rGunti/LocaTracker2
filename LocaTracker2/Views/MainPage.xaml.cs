@@ -78,8 +78,13 @@ namespace LocaTracker2.Views
 
         private void ClockTimer_Tick(object sender, object e)
         {
-            // TODO: Use Current Location
-            SetTime(DateTime.Now);
+            if (GpsRecorder.Instance.CurrentPosition != null) {
+                var p = GpsRecorder.Instance.CurrentPosition;
+                DateTime localTime = GeoTimeZoneUtils.GetTimeAtLocation(p.Latitude, p.Longitude);
+                SetTime(DateTime.UtcNow, localTime);
+            } else {
+                SetTime(DateTime.UtcNow);
+            }
         }
 
         private void TripsButton_Click(object sender, RoutedEventArgs e)
@@ -114,7 +119,8 @@ namespace LocaTracker2.Views
         public void SetAltitude(double metricValue)
         {
             double displayValue = metricValue;
-            if (useImperialUnits) {
+            if (useImperialUnits)
+            {
                 displayValue = GpsUtilities.MetricImperialConverter.ConvertMeterToFeet(metricValue);
             }
             AltitudeLabel.Text = $"{displayValue:0}";
@@ -123,16 +129,17 @@ namespace LocaTracker2.Views
         public void SetDistance(double metricValue)
         {
             double displayValue = metricValue / 1000;
-            if (useImperialUnits) {
+            if (useImperialUnits)
+            {
                 displayValue = GpsUtilities.MetricImperialConverter.ConvertKMtoMile(metricValue);
             }
             DistanceLabel.Text = $"{displayValue:0.0}";
         }
 
-        public void SetTime(DateTime currentTime)
+        public void SetTime(DateTime utcTime, DateTime? currentTime = null)
         {
-            DateTime utcTime = TimeZoneInfo.ConvertTime(currentTime, TimeZoneInfo.Utc);
-            LocalTimeLabel.Text = $"{currentTime:HH:mm:ss}";
+            if (!currentTime.HasValue) currentTime = DateTime.Now;
+            LocalTimeLabel.Text = $"{currentTime.Value:HH:mm:ss}";
             UtcTimeLabel.Text = $"{utcTime:HH:mm:ss}";
         }
 

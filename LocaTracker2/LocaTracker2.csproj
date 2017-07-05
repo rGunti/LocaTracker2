@@ -97,6 +97,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Logic\GeoTimeZoneUtils.cs" />
     <Compile Include="Logic\GpsRecorder.cs" />
     <Compile Include="Settings\MaintenanceTask\BaseMaintenanceTask.cs" />
     <Compile Include="Settings\MaintenanceTask\DistanceRecalculationTask.cs" />
