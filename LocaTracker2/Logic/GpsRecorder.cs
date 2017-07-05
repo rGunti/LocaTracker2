@@ -11,9 +11,14 @@ using Windows.Devices.Geolocation;
 
 namespace LocaTracker2.Logic
 {
+    public enum RecordingPausedReason
+    {
+        WasNot, LowSpeed, LowAccuracy
+    }
+
     public class GpsRecorder : GpsTracker<GpsRecorder>
     {
-        public delegate void OnPositionUpdateDelegate(Point point, bool wasRecorded);
+        public delegate void OnPositionUpdateDelegate(Point point, RecordingPausedReason recordingPausedReason);
         public event OnPositionUpdateDelegate OnPositionUpdate;
 
         public LocaTrackerDbContext dbContext = new LocaTrackerDbContext();
@@ -55,9 +60,10 @@ namespace LocaTracker2.Logic
         protected override void Locator_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
             Point point = GpsModelExtension.GetPointFromGpsTracker(args.Position.Coordinate);
+            RecordingPausedReason reason = RecordingPausedReason.WasNot;
             double minSpeed = RecordingSettingsReader.Instance.MinSpeed;
 
-            bool doRecording = IsRecording && point.Accuracy < RecordingSettingsReader.Instance.MaxAccuracy;
+            bool doRecording = IsRecording && point.Accuracy <= RecordingSettingsReader.Instance.MaxAccuracy;
             if (doRecording && point.Speed < minSpeed && CurrentPosition.Speed < minSpeed) doRecording = false;
 
             if (doRecording)
@@ -65,10 +71,14 @@ namespace LocaTracker2.Logic
                 point.TripSectionID = CurrentRecordingTripSection.TripSectionID;
                 dbContext.Add(point);
                 dbContext.SaveChanges();
+            } else if (point.Speed < minSpeed) {
+                reason = RecordingPausedReason.LowSpeed;
+            } else if (point.Accuracy > RecordingSettingsReader.Instance.MaxAccuracy) {
+                reason = RecordingPausedReason.LowAccuracy;
             }
 
             CurrentPosition = point;
-            OnPositionUpdate?.Invoke(point, doRecording);
+            OnPositionUpdate?.Invoke(point, reason);
         }
 
         protected override void Locator_StatusChanged(Geolocator sender, StatusChangedEventArgs args)

@@ -90,13 +90,15 @@ namespace LocaTracker2.Views
             }
         }
 
-        private async void GpsRecorder_OnPositionUpdate(Db.Objects.Point point, bool wasRecorded)
+        private async void GpsRecorder_OnPositionUpdate(Db.Objects.Point point, RecordingPausedReason recordingPausedReason)
         {
             await Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 SetSpeed(point.Speed);
                 SetAltitude(point.Altitude);
                 SetAccuracy(point.Accuracy);
+
+                SetRecordingState(GpsRecorder.Instance.IsRecording, recordingPausedReason);
             });
         }
 
@@ -212,6 +214,25 @@ namespace LocaTracker2.Views
                 AccuracyStatusIndicator.Label = $"No Data";
             else
                 AccuracyStatusIndicator.Label = $"{Convert.ToChar(177)} {accuracy:0} m";
+        }
+
+        public void SetRecordingState(bool isRecording, RecordingPausedReason recordingPausedReason)
+        {
+            if (isRecording)
+            {
+                switch (recordingPausedReason)
+                {
+                    case RecordingPausedReason.LowSpeed:
+                        recordingState = StatusIndicatorState.Info;
+                        break;
+                    case RecordingPausedReason.LowAccuracy:
+                    default:
+                        recordingState = StatusIndicatorState.WarnInfo;
+                        break;
+                }
+            } else recordingState = StatusIndicatorState.Off;
+
+            RecordButton.Tag = recordingState;
         }
         #endregion UI Data Modification Methods
 
