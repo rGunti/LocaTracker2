@@ -48,6 +48,7 @@ namespace LocaTracker2.Views
             this.InitializeComponent();
 
             GpsRecorder.Instance.OnPositionUpdate += GpsRecorder_OnPositionUpdate;
+            UnitSettingsReader.Instance.OnSettingsChanged += UnitSettingsReader_OnSettingsChanged;
 
             unitSettings = UnitSettingsReader.Instance;
             useImperialUnits = unitSettings.UseImperialUnits;
@@ -69,6 +70,15 @@ namespace LocaTracker2.Views
             clockTimer.Start();
             gpsTimer.Start();
             statusIndicatorTimer.Start();
+        }
+
+        private void UnitSettingsReader_OnSettingsChanged(string key, object newValue)
+        {
+            if (key == UnitSettingsReader.KEY_USE_IMPERIAL_UNITS)
+            {
+                useImperialUnits = (bool)newValue;
+                SetUnitLabels(useImperialUnits);
+            }
         }
 
         private void StatusIndicatorTimer_Tick(object sender, object e)
@@ -155,14 +165,18 @@ namespace LocaTracker2.Views
         private void Page_Loading(FrameworkElement sender, object args)
         {
             useImperialUnits = unitSettings.UseImperialUnits;
+            SetUnitLabels(useImperialUnits);
+        }
 
+        #region UI Data Modification Methods
+        private void SetUnitLabels(bool useImperialUnits)
+        {
             SpeedUnitLabel.Text = (useImperialUnits) ? "mph" : "km/h";
             AlternativeUnitSpeedUnitLabel.Text = (useImperialUnits) ? "km/h" : "mph";
             AltitudeUnitLabel.Text = (useImperialUnits) ? "ft" : "m";
             DistanceUnitLabel.Text = (useImperialUnits) ? "mi" : "km";
         }
 
-        #region UI Data Modification Methods
         public void SetSpeed(double metricValue)
         {
             metricValue = GpsUtilities.PreventNaN(metricValue);

@@ -17,6 +17,9 @@ namespace LocaTracker2.Settings
             }
         }
 
+        public delegate void OnSettingsChangedDelegate(string key, object newValue);
+        public event OnSettingsChangedDelegate OnSettingsChanged;
+
         protected SettingsReader() { InitializeSettingsValues(); }
 
         protected abstract void InitializeSettingsValues();
@@ -36,7 +39,10 @@ namespace LocaTracker2.Settings
 
         protected bool HasKey(string key) { return ApplicationData.Current.LocalSettings.Values.ContainsKey(key); }
         protected object GetValue(string key) { return ApplicationData.Current.LocalSettings.Values[key]; }
-        protected void SetValue(string key, object value) { ApplicationData.Current.LocalSettings.Values[key] = value; }
+        protected void SetValue(string key, object value) {
+            ApplicationData.Current.LocalSettings.Values[key] = value;
+            OnSettingsChanged?.Invoke(key, value);
+        }
 
         protected T GetValue<T>(string key)
         {

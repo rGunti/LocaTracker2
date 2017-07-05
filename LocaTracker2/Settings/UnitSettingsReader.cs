@@ -8,7 +8,7 @@ namespace LocaTracker2.Settings
 {
     public class UnitSettingsReader : SettingsReader<UnitSettingsReader>
     {
-        private const string KEY_USE_IMPERIAL_UNITS = "LOCATRACK2.UNITS.UseImperialUnits";
+        public const string KEY_USE_IMPERIAL_UNITS = "LOCATRACK2.UNITS.UseImperialUnits";
 
         protected override void InitializeSettingsValues()
         {
