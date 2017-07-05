@@ -39,11 +39,20 @@ namespace LocaTracker2.Logic
             CurrentRecordingTrip = dbContext.Trips.FirstOrDefault(t => t.TripID == RecordingSettingsReader.Instance.RecordingTripID);
             if (CurrentRecordingTrip == null) return false;
 
+            CurrentTripSectionDistance = 0;
+            foreach (TripSection section in CurrentRecordingTrip.Sections) {
+                if (!section.StoredSectionDistance.HasValue) {
+                    section.CalculateSectionDistance();
+                }
+                CurrentTripSectionDistance += section.SectionDistance;
+            }
+
             TripSection tripSection = new TripSection()
             {
                 TripID = CurrentRecordingTrip.TripID,
                 Started = DateTime.UtcNow
             };
+            CurrentTripSectionDistance = 0;
             dbContext.Add(tripSection);
             dbContext.SaveChanges();
             CurrentRecordingTripSection = tripSection;
@@ -54,6 +63,7 @@ namespace LocaTracker2.Logic
         public void EndRecording()
         {
             CurrentRecordingTripSection.Ended = DateTime.UtcNow;
+            CurrentRecordingTripSection.StoredSectionDistance = CurrentTripSectionDistance;
             dbContext.Update(CurrentRecordingTripSection);
             dbContext.SaveChanges();
             dbContext.Dispose();
@@ -71,6 +81,12 @@ namespace LocaTracker2.Logic
 
             if (doRecording)
             {
+                if (CurrentPosition != null) {
+                    CurrentTripSectionDistance += GpsUtilities.GetDistanceBetweenTwoPoints(
+                        CurrentPosition.Latitude, CurrentPosition.Longitude,
+                        point.Latitude, point.Longitude
+                    );
+                }
                 point.TripSectionID = CurrentRecordingTripSection.TripSectionID;
                 dbContext.Add(point);
                 dbContext.SaveChanges();
