@@ -13,7 +13,7 @@ namespace LocaTracker2.Logic
 {
     public enum RecordingPausedReason
     {
-        WasNot, LowSpeed, LowAccuracy
+        WasNot, Initializing, FailedToInitialize, LowSpeed, LowAccuracy
     }
 
     public class GpsRecorder : GpsTracker<GpsRecorder>

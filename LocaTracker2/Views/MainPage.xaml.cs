@@ -153,10 +153,14 @@ namespace LocaTracker2.Views
                     GpsRecorder.Instance.EndRecording();
                 });
             } else {
-                Task.Run(() => {
+                SetRecordingState(true, RecordingPausedReason.Initializing);
+                Task.Run(async () => {
                     if (!GpsRecorder.Instance.StartRecording())
                     {
-                        // TODO: Show Message Box
+                        await Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        {
+                            SetRecordingState(false, RecordingPausedReason.FailedToInitialize);
+                        });
                     }
                 });
             }
@@ -237,15 +241,26 @@ namespace LocaTracker2.Views
             {
                 switch (recordingPausedReason)
                 {
+                    case RecordingPausedReason.WasNot:
+                        recordingState = StatusIndicatorState.Ok;
+                        break;
                     case RecordingPausedReason.LowSpeed:
                         recordingState = StatusIndicatorState.Info;
+                        break;
+                    case RecordingPausedReason.Initializing:
+                        recordingState = StatusIndicatorState.Warning;
                         break;
                     case RecordingPausedReason.LowAccuracy:
                     default:
                         recordingState = StatusIndicatorState.WarnInfo;
                         break;
                 }
-            } else recordingState = StatusIndicatorState.Off;
+            } else {
+                if (recordingPausedReason == RecordingPausedReason.FailedToInitialize)
+                    recordingState = StatusIndicatorState.Error;
+                else
+                    recordingState = StatusIndicatorState.Off;
+            }
 
             RecordButton.Tag = recordingState;
         }
