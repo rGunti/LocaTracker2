@@ -1,4 +1,5 @@
-﻿using LocaTracker2.Settings;
+﻿using LocaTracker2.Logging.ETW;
+using LocaTracker2.Settings;
 using LocaTracker2.Settings.MaintenanceTask;
 using LocaTracker2.Views.Dialogs;
 using System;
@@ -89,14 +90,16 @@ namespace LocaTracker2.Views
             ExecuteMaintenanceTask(new DistanceRecalculationTask());
         }
 
-        private void UseImperialUnits_Loading(FrameworkElement sender, object args)
+        private void UseImperialUnitsToggleSwitch_Loading(FrameworkElement sender, object args)
         {
             ((ToggleSwitch)sender).IsOn = UnitSettingsReader.Instance.UseImperialUnits;
+            LocaTrackerEventSource.Instance.Verbose("Setting loaded: UseImperialUnits");
         }
 
-        private void UseImperialUnits_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        private void UseImperialUnitsToggleSwitch_LostFocus(object sender, RoutedEventArgs e)
         {
             UnitSettingsReader.Instance.UseImperialUnits = ((ToggleSwitch)sender).IsOn;
+            LocaTrackerEventSource.Instance.Verbose("Setting written: UseImperialUnits");
         }
     }
 }

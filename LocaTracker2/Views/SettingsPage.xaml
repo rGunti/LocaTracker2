@@ -21,11 +21,11 @@
                                TextWrapping="WrapWholeWords"
                                FontSize="12"
                                />
-                    <ToggleSwitch x:Name="UseImperialUnits"
+                    <ToggleSwitch x:Name="UseImperialUnitsToggleSwitch"
                                   OffContent="Use Metrical Units (km, km/h)" 
                                   OnContent="Use Imperial Units (mi, mph)"
-                                  Loading="UseImperialUnits_Loading"
-                                  ManipulationCompleted="UseImperialUnits_ManipulationCompleted"
+                                  Loading="UseImperialUnitsToggleSwitch_Loading"
+                                  LostFocus="UseImperialUnitsToggleSwitch_LostFocus"
                                   />
                 </StackPanel>
             </PivotItem>
