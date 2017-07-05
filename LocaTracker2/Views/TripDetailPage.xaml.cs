@@ -1,5 +1,6 @@
 ﻿using LocaTracker2.Db;
 using LocaTracker2.Db.Objects;
+using LocaTracker2.Settings;
 using LocaTracker2.Views.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -27,6 +29,8 @@ namespace LocaTracker2.Views
     /// </summary>
     public sealed partial class TripDetailPage : Page
     {
+        static Brush controlBrush = new SolidColorBrush(Color.FromArgb(255, 0, 160, 0));
+
         private Trip editorTrip;
 
         public TripDetailPage()
@@ -50,6 +54,7 @@ namespace LocaTracker2.Views
             //TripIDTextBox.Text = editorTrip.TripID.ToString();
             //TripNameTextBox.Text = editorTrip.Name;
             //TripDescriptionTextBox.Text = editorTrip.Description;
+            SelectRecordingTripButton.Background = (RecordingSettingsReader.Instance.RecordingTripID == editorTrip.TripID ? controlBrush : null);
 
             Task.Run(async () => {
                 using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
@@ -110,6 +115,15 @@ namespace LocaTracker2.Views
         {
             TextBox textBox = sender as TextBox;
             editorTrip.Set(textBox.Tag.ToString(), textBox.Text);
+        }
+
+        private async void SelectRecordingTripButton_Click(object sender, RoutedEventArgs e)
+        {
+            RecordingSettingsReader.Instance.RecordingTripID = editorTrip.TripID;
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                SelectRecordingTripButton.Background = controlBrush;
+            });
         }
     }
 }

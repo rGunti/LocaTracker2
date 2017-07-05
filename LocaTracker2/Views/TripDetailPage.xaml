@@ -10,6 +10,11 @@
     
     <Page.BottomAppBar>
         <CommandBar>
+            <AppBarButton x:Name="SelectRecordingTripButton"
+                          Label="Set as Recording Trip"
+                          Icon="Memo"
+                          Click="SelectRecordingTripButton_Click"
+                          />
             <AppBarButton x:Name="DeleteTripButton"
                           Label="Delete"
                           Icon="Delete"

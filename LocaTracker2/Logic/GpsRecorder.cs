@@ -20,7 +20,7 @@ namespace LocaTracker2.Logic
 
         public Point CurrentPosition { get; protected set; } = new Point();
         public TripSection CurrentRecordingTripSection { get; protected set; }
-        public Trip CurrentRecordingTrip { get; set; }
+        public Trip CurrentRecordingTrip { get; protected set; }
 
         public double CurrentTripDistance { get; protected set; }
         public double CurrentTripSectionDistance { get; protected set; }
@@ -29,7 +29,8 @@ namespace LocaTracker2.Logic
 
         public bool StartRecording()
         {
-            if (CurrentRecordingTripSection == null) return false;
+            CurrentRecordingTrip = dbContext.Trips.FirstOrDefault(t => t.TripID == RecordingSettingsReader.Instance.RecordingTripID);
+            if (CurrentRecordingTrip == null) return false;
 
             TripSection tripSection = new TripSection()
             {
