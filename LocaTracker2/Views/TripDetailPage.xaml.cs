@@ -61,11 +61,13 @@ namespace LocaTracker2.Views
 
             var dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
             await Task.Run(async () => {
+                await Task.Delay(150);
                 using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
                     IEnumerable<TripSection> sections = db.TripSections.Where(s => s.TripID == editorTrip.TripID).ToList();
                     foreach (TripSection section in sections.Where(s => s.IsActive)) {
                         section.CalculateSectionDistance();
                     }
+                    await Task.Delay(150);
                     await dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
                         //editorTrip.Sections = sections.ToList();
                         TripSectionList.ItemsSource = sections;

@@ -1,9 +1,11 @@
 ﻿using LocaTracker2.Gps;
+using LocaTracker2.Logging.ETW;
 using LocaTracker2.Logic;
 using LocaTracker2.Settings;
 using LocaTracker2.Views.Dialogs;
 using System;
 using System.Threading.Tasks;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -32,6 +34,16 @@ namespace LocaTracker2.Views
         static bool blinkingIndicatorOn = false;
         static MissingPermissionDialog missingPermissionDialog = new MissingPermissionDialog();
 
+        static string
+            lsv_mainSpeed = "  0",
+            lsv_secSpeed = "0",
+            lsv_altitude = "0",
+            lsv_distance = "0.0",
+            lsv_localTime = "--:--:--",
+            lsv_utcTime = "--:--:--",
+            lsv_accuracy = "0"
+        ;        
+
         private UnitSettingsReader unitSettings;
         private bool useImperialUnits;
 
@@ -54,7 +66,7 @@ namespace LocaTracker2.Views
 
             GpsRecorder.Instance.OnPositionUpdate += GpsRecorder_OnPositionUpdate;
             UnitSettingsReader.Instance.OnSettingsChanged += UnitSettingsReader_OnSettingsChanged;
-
+            
             unitSettings = UnitSettingsReader.Instance;
             useImperialUnits = unitSettings.UseImperialUnits;
 
@@ -72,9 +84,28 @@ namespace LocaTracker2.Views
             gpsTimer.Tick += GpsTimer_TickAsync;
             statusIndicatorTimer.Tick += StatusIndicatorTimer_Tick;
 
+            RestoreLastStoredValues();
+
             clockTimer.Start();
             gpsTimer.Start();
             statusIndicatorTimer.Start();
+        }
+
+        private void Frame_Navigating(object sender, Windows.UI.Xaml.Navigation.NavigatingCancelEventArgs e)
+        {
+            LocaTrackerEventSource.Instance.Verbose($"{sender.GetType()}");
+        }
+
+        private void RestoreLastStoredValues()
+        {
+            AccuracyStatusIndicator.Label = lsv_accuracy;
+            SpeedLabel.Text = lsv_mainSpeed;
+            AlternativeUnitSpeedLabel.Text = lsv_secSpeed;
+
+            AltitudeLabel.Text = lsv_altitude;
+            DistanceLabel.Text = lsv_distance;
+
+            SetTime(DateTime.UtcNow);
         }
 
         private void UnitSettingsReader_OnSettingsChanged(string key, object newValue)
@@ -169,6 +200,7 @@ namespace LocaTracker2.Views
                     GpsRecorder.Instance.EndRecording();
                 });
             } else {
+                RecordButton.IsEnabled = false;
                 SetRecordingState(true, RecordingPausedReason.Initializing);
                 Task.Run(async () => {
                     if (!GpsRecorder.Instance.StartRecording())
@@ -176,6 +208,12 @@ namespace LocaTracker2.Views
                         await Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                         {
                             SetRecordingState(false, RecordingPausedReason.FailedToInitialize);
+                            RecordButton.IsEnabled = true;
+                        });
+                    } else {
+                        await Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
+                            RecordButton.IsEnabled = true;
+                            SetDistance(GpsRecorder.Instance.CurrentTripDistance);
                         });
                     }
                 });
@@ -224,6 +262,7 @@ namespace LocaTracker2.Views
                 displayValue = GpsUtilities.MetricImperialConverter.ConvertKMtoMile(metricValue);
             }
             DistanceLabel.Text = $"{displayValue:0.0}";
+            lsv_distance = DistanceLabel.Text;
         }
 
         public void SetTime(DateTime utcTime, DateTime? currentTime = null)
@@ -231,6 +270,9 @@ namespace LocaTracker2.Views
             if (!currentTime.HasValue) currentTime = DateTime.Now;
             LocalTimeLabel.Text = $"{currentTime.Value:HH:mm:ss}";
             UtcTimeLabel.Text = $"{utcTime:HH:mm:ss}";
+
+            lsv_localTime = LocalTimeLabel.Text;
+            lsv_utcTime = UtcTimeLabel.Text;
         }
 
         public void SetAccuracy(double accuracy)
@@ -249,6 +291,8 @@ namespace LocaTracker2.Views
                 AccuracyStatusIndicator.Label = $"No Data";
             else
                 AccuracyStatusIndicator.Label = $"{Convert.ToChar(177)} {accuracy:0} m";
+
+            lsv_accuracy = AccuracyStatusIndicator.Label;
         }
 
         public void SetRecordingState(bool isRecording, RecordingPausedReason recordingPausedReason)
