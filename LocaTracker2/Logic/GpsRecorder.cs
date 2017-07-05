@@ -44,7 +44,7 @@ namespace LocaTracker2.Logic
                 TripID = CurrentRecordingTrip.TripID,
                 Started = DateTime.UtcNow
             };
-            dbContext.Update(tripSection);
+            dbContext.Add(tripSection);
             dbContext.SaveChanges();
             CurrentRecordingTripSection = tripSection;
             IsRecording = true;

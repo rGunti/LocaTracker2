@@ -47,16 +47,18 @@ namespace LocaTracker2.Views
             e.Handled = true;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             editorTrip = e.Parameter as Trip;
             this.DataContext = editorTrip;
             //TripIDTextBox.Text = editorTrip.TripID.ToString();
             //TripNameTextBox.Text = editorTrip.Name;
             //TripDescriptionTextBox.Text = editorTrip.Description;
-            SelectRecordingTripButton.Background = (RecordingSettingsReader.Instance.RecordingTripID == editorTrip.TripID ? controlBrush : null);
+            await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
+                SelectRecordingTripButton.Background = (RecordingSettingsReader.Instance.RecordingTripID == editorTrip.TripID ? controlBrush : null);
+            });
 
-            Task.Run(async () => {
+            await Task.Run(async () => {
                 using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
                     IEnumerable<TripSection> sections = db.TripSections.Where(s => s.TripID == editorTrip.TripID).ToList();
                     foreach (TripSection section in sections.Where(s => s.IsActive)) {
@@ -117,13 +119,10 @@ namespace LocaTracker2.Views
             editorTrip.Set(textBox.Tag.ToString(), textBox.Text);
         }
 
-        private async void SelectRecordingTripButton_Click(object sender, RoutedEventArgs e)
+        private void SelectRecordingTripButton_Click(object sender, RoutedEventArgs e)
         {
             RecordingSettingsReader.Instance.RecordingTripID = editorTrip.TripID;
-            await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                SelectRecordingTripButton.Background = controlBrush;
-            });
+            Frame.Navigate(typeof(TripListPage));
         }
     }
 }

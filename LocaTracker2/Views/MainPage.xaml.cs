@@ -1,6 +1,7 @@
 ﻿using LocaTracker2.Gps;
 using LocaTracker2.Logic;
 using LocaTracker2.Settings;
+using LocaTracker2.Views.Dialogs;
 using System;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
@@ -26,6 +27,10 @@ namespace LocaTracker2.Views
             bar4 = new SymbolIcon(Symbol.FourBars)
         ;
         #endregion
+
+        static bool missingPermissionScreenDisplayed = false;
+        static bool blinkingIndicatorOn = false;
+        static MissingPermissionDialog missingPermissionDialog = new MissingPermissionDialog();
 
         private UnitSettingsReader unitSettings;
         private bool useImperialUnits;
@@ -64,7 +69,7 @@ namespace LocaTracker2.Views
             RecordButton.Tag = recordingState;
 
             clockTimer.Tick += ClockTimer_Tick;
-            gpsTimer.Tick += GpsTimer_Tick;
+            gpsTimer.Tick += GpsTimer_TickAsync;
             statusIndicatorTimer.Tick += StatusIndicatorTimer_Tick;
 
             clockTimer.Start();
@@ -83,16 +88,17 @@ namespace LocaTracker2.Views
 
         private void StatusIndicatorTimer_Tick(object sender, object e)
         {
+            blinkingIndicatorOn = !blinkingIndicatorOn;
             foreach (AppBarButton indicator in statusIndicatorElements)
             {
                 StatusIndicatorState state = (StatusIndicatorState)indicator.Tag;
                 Brush brush = state.GetBrush();
 
                 if (state.IsBlinking()) {
-                    if (indicator.Background == brush) {
-                        indicator.Background = StatusIndicatorStateExtesions.DefaultBrush;
-                    } else {
+                    if (blinkingIndicatorOn) {
                         indicator.Background = brush;
+                    } else {
+                        indicator.Background = StatusIndicatorStateExtesions.DefaultBrush;
                     }
                 } else {
                     indicator.Background = brush;
@@ -112,14 +118,20 @@ namespace LocaTracker2.Views
             });
         }
 
-        private void GpsTimer_Tick(object sender, object e)
+        private async void GpsTimer_TickAsync(object sender, object e)
         {
-            if (GpsRecorder.Instance.CurrentPosition != null)
-            {
+            if (GpsRecorder.Instance.LocatorAccessStatus == Windows.Devices.Geolocation.GeolocationAccessStatus.Denied 
+                && !missingPermissionScreenDisplayed) {
+                missingPermissionScreenDisplayed = true;
+                missingPermissionDialog.ShowAsync();
+            } else if (GpsRecorder.Instance.LocatorAccessStatus == Windows.Devices.Geolocation.GeolocationAccessStatus.Allowed && missingPermissionScreenDisplayed) {
+                missingPermissionScreenDisplayed = false;
+            }
+
+            if (GpsRecorder.Instance.CurrentPosition != null) {
                 var p = GpsRecorder.Instance.CurrentPosition;
                 SetAccuracy(p.Accuracy);
-            } else
-            {
+            } else {
                 SetAccuracy(double.NaN);
             }
         }
@@ -137,7 +149,11 @@ namespace LocaTracker2.Views
 
         private void TripsButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(TripListPage));
+            if (GpsRecorder.Instance.IsRecording) {
+                new TripListBlockedDialog().ShowAsync();
+            } else {
+                Frame.Navigate(typeof(TripListPage));
+            }
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)

@@ -25,6 +25,8 @@ namespace LocaTracker2.Gps
 
         protected bool settingUp = false;
 
+        public GeolocationAccessStatus LocatorAccessStatus { get { return accessStatus; } }
+
         #region Setup
         public async Task InitAsync()
         {

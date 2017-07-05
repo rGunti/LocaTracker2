@@ -119,6 +119,9 @@
     <Compile Include="Views\Dialogs\ProcessingDialog.xaml.cs">
       <DependentUpon>ProcessingDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\TripListBlockedDialog.xaml.cs">
+      <DependentUpon>TripListBlockedDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -179,6 +182,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\ProcessingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\TripListBlockedDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
