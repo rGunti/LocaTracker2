@@ -1,4 +1,5 @@
-﻿using LocaTracker2.Logging.ETW;
+﻿using LocaTracker2.Gps;
+using LocaTracker2.Logging.ETW;
 using LocaTracker2.Settings;
 using LocaTracker2.Settings.MaintenanceTask;
 using LocaTracker2.Views.Dialogs;
@@ -93,13 +94,41 @@ namespace LocaTracker2.Views
         private void UseImperialUnitsToggleSwitch_Loading(FrameworkElement sender, object args)
         {
             ((ToggleSwitch)sender).IsOn = UnitSettingsReader.Instance.UseImperialUnits;
-            LocaTrackerEventSource.Instance.Verbose("Setting loaded: UseImperialUnits");
         }
 
         private void UseImperialUnitsToggleSwitch_LostFocus(object sender, RoutedEventArgs e)
         {
             UnitSettingsReader.Instance.UseImperialUnits = ((ToggleSwitch)sender).IsOn;
-            LocaTrackerEventSource.Instance.Verbose("Setting written: UseImperialUnits");
+        }
+
+        private void RecordingMinSpeedTextBox_Loading(FrameworkElement sender, object args)
+        {
+            ((TextBox)sender).Text = Math.Floor(GpsUtilities.ConvertMPStoKMH(RecordingSettingsReader.Instance.MinSpeed)).ToString();
+        }
+
+        private void RecordingMinSpeedTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double value;
+            if (double.TryParse(((TextBox)sender).Text, out value)) {
+                RecordingSettingsReader.Instance.MinSpeed = GpsUtilities.ConvertKMHtoMPS(value);
+            } else {
+                RecordingMinSpeedTextBox_Loading(sender as FrameworkElement, null);
+            }
+        }
+
+        private void RecordingMaxAccuracyTextBox_Loading(FrameworkElement sender, object args)
+        {
+            ((TextBox)sender).Text = RecordingSettingsReader.Instance.MaxAccuracy.ToString();
+        }
+
+        private void RecordingMaxAccuracyTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double value;
+            if (double.TryParse(((TextBox)sender).Text, out value)) {
+                RecordingSettingsReader.Instance.MaxAccuracy = value;
+            } else {
+                RecordingMaxAccuracyTextBox_Loading(sender as FrameworkElement, null);
+            }
         }
     }
 }

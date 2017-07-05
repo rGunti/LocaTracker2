@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
@@ -58,13 +59,14 @@ namespace LocaTracker2.Views
                 SelectRecordingTripButton.Background = (RecordingSettingsReader.Instance.RecordingTripID == editorTrip.TripID ? controlBrush : null);
             });
 
+            var dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
             await Task.Run(async () => {
                 using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
                     IEnumerable<TripSection> sections = db.TripSections.Where(s => s.TripID == editorTrip.TripID).ToList();
                     foreach (TripSection section in sections.Where(s => s.IsActive)) {
                         section.CalculateSectionDistance();
                     }
-                    await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
+                    await dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
                         //editorTrip.Sections = sections.ToList();
                         TripSectionList.ItemsSource = sections;
                         //LoadingTripSectionsProgressBar.Visibility = Visibility.Collapsed;

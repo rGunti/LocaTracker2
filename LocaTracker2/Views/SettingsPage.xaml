@@ -17,7 +17,7 @@
                                TextWrapping="WrapWholeWords"
                                FontSize="12"
                                />
-                    <TextBlock Text="Please note that data will always be recorded in metric and converted to imperial if needed. Internal data (like accuracy) will always be represented in metrical units."
+                    <TextBlock Text="Please note that data will always be recorded in metric and converted to imperial if needed. Internal data (like accuracy or settings) will always be represented in metrical units."
                                TextWrapping="WrapWholeWords"
                                FontSize="12"
                                />
@@ -27,6 +27,24 @@
                                   Loading="UseImperialUnitsToggleSwitch_Loading"
                                   LostFocus="UseImperialUnitsToggleSwitch_LostFocus"
                                   />
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="Recording Settings">
+                <StackPanel>
+                    <TextBox x:Name="RecordingMinSpeedTextBox"
+                             Header="Min. Recording Speed (in km/h)"
+                             PlaceholderText="Speed in [km/h]"
+                             InputScope="Number"
+                             Loading="RecordingMinSpeedTextBox_Loading"
+                             LostFocus="RecordingMinSpeedTextBox_LostFocus"
+                             />
+                    <TextBox x:Name="RecordingMaxAccuracyTextBox"
+                             Header="Min. Accuracy (in m)"
+                             PlaceholderText="Accuracy in [m]"
+                             InputScope="Number"
+                             Loading="RecordingMaxAccuracyTextBox_Loading"
+                             LostFocus="RecordingMaxAccuracyTextBox_LostFocus"
+                             />
                 </StackPanel>
             </PivotItem>
             <PivotItem Header="Maint. Tasks">

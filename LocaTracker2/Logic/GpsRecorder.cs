@@ -34,7 +34,7 @@ namespace LocaTracker2.Logic
 
         public bool StartRecording()
         {
-            dbContext = new LocaTrackerDbContext();
+            dbContext = LocaTrackerDbContext.GetNonTrackingInstance();
 
             CurrentRecordingTrip = dbContext.Trips.FirstOrDefault(t => t.TripID == RecordingSettingsReader.Instance.RecordingTripID);
             if (CurrentRecordingTrip == null) return false;
