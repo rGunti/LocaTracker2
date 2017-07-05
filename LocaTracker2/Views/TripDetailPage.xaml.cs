@@ -120,7 +120,7 @@ namespace LocaTracker2.Views
         private async void SelectRecordingTripButton_Click(object sender, RoutedEventArgs e)
         {
             RecordingSettingsReader.Instance.RecordingTripID = editorTrip.TripID;
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 SelectRecordingTripButton.Background = controlBrush;
             });

@@ -21,7 +21,18 @@ namespace LocaTracker2.Settings
 
         protected abstract void InitializeSettingsValues();
 
-        protected void InitSettingsValue(string key, object defaultValue) { if (!HasKey(key)) SetValue(key, defaultValue); }
+        protected void InitSettingsValue(string key, object defaultValue) {
+            if (!HasKey(key)) SetValue(key, defaultValue);
+            else
+            {
+                object value = GetValue(key);
+                if (value.GetType() != defaultValue.GetType())
+                {
+                    // Settings Value will be overwritten if the types do not match
+                    SetValue(key, defaultValue);
+                }
+            }
+        }
 
         protected bool HasKey(string key) { return ApplicationData.Current.LocalSettings.Values.ContainsKey(key); }
         protected object GetValue(string key) { return ApplicationData.Current.LocalSettings.Values[key]; }

@@ -165,6 +165,7 @@ namespace LocaTracker2.Views
         #region UI Data Modification Methods
         public void SetSpeed(double metricValue)
         {
+            metricValue = GpsUtilities.PreventNaN(metricValue);
             double kmh = GpsUtilities.ConvertMPStoKMH(metricValue);
             double mph = GpsUtilities.MetricImperialConverter.ConvertMPStoMPH(metricValue);
             SpeedLabel.Text = $"{(useImperialUnits ? mph : kmh),3:0}";

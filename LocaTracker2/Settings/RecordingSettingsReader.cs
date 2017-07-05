@@ -14,9 +14,9 @@ namespace LocaTracker2.Settings
 
         protected override void InitializeSettingsValues()
         {
-            InitSettingsValue(KEY_MIN_SPEED, 1.388);    // 5 km/h
-            InitSettingsValue(KEY_MAX_ACCURACY, 50);    // 50 m
-            InitSettingsValue(KEY_RECORDING_TRIP, 0);   // -
+            InitSettingsValue(KEY_MIN_SPEED, (double)1.388);    // 5 km/h
+            InitSettingsValue(KEY_MAX_ACCURACY, (double)50);    // 50 m
+            InitSettingsValue(KEY_RECORDING_TRIP, (int)0);      // -
         }
 
         public double MinSpeed {

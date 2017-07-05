@@ -21,7 +21,7 @@ namespace LocaTracker2.Logic
         public delegate void OnPositionUpdateDelegate(Point point, RecordingPausedReason recordingPausedReason);
         public event OnPositionUpdateDelegate OnPositionUpdate;
 
-        public LocaTrackerDbContext dbContext = new LocaTrackerDbContext();
+        public LocaTrackerDbContext dbContext;
 
         public Point CurrentPosition { get; protected set; } = null;
         public TripSection CurrentRecordingTripSection { get; protected set; }
@@ -34,6 +34,8 @@ namespace LocaTracker2.Logic
 
         public bool StartRecording()
         {
+            dbContext = new LocaTrackerDbContext();
+
             CurrentRecordingTrip = dbContext.Trips.FirstOrDefault(t => t.TripID == RecordingSettingsReader.Instance.RecordingTripID);
             if (CurrentRecordingTrip == null) return false;
 
@@ -54,6 +56,7 @@ namespace LocaTracker2.Logic
             CurrentRecordingTripSection.Ended = DateTime.UtcNow;
             dbContext.Update(CurrentRecordingTripSection);
             dbContext.SaveChanges();
+            dbContext.Dispose();
             IsRecording = false;
         }
 
@@ -91,7 +94,7 @@ namespace LocaTracker2.Logic
         {
             return new Point()
             {
-                Timestamp = DateTime.Now,
+                Timestamp = DateTime.UtcNow,
                 Latitude = coord.Point.Position.Latitude,
                 Longitude = coord.Point.Position.Longitude,
                 Altitude = coord.Point.Position.Altitude,
