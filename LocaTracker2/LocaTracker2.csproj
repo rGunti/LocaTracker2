@@ -132,6 +132,7 @@
     <Compile Include="Views\TripListPage.xaml.cs">
       <DependentUpon>TripListPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UIUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

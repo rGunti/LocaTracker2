@@ -2,22 +2,9 @@
 using LocaTracker2.Logic;
 using LocaTracker2.Settings;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Devices.Geolocation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -38,17 +25,6 @@ namespace LocaTracker2.Views
             bar4 = new SymbolIcon(Symbol.FourBars)
         ;
         #endregion
-
-        #region Brushes
-        static Brush
-            defaultBrush = null,
-            controlBrush = new SolidColorBrush(Color.FromArgb(255, 0, 160, 0)),
-            warningBrush = new SolidColorBrush(Color.FromArgb(255, 255, 125, 0)),
-            errorBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)),
-            disabledBrush = new SolidColorBrush(Color.FromArgb(255, 100, 100, 100)),
-            whiteBrush = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255))
-        ;
-        #endregion Brushes
 
         private UnitSettingsReader unitSettings;
         private bool useImperialUnits;
