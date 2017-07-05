@@ -45,6 +45,12 @@
                              Loading="RecordingMaxAccuracyTextBox_Loading"
                              LostFocus="RecordingMaxAccuracyTextBox_LostFocus"
                              />
+                    <TextBox x:Name="DEBUG_RecordingTripIDTextBox"
+                             Header="DEBUG: Recording Trip ID"
+                             InputScope="Number"
+                             Loading="DEBUG_RecordingTripIDTextBox_Loading"
+                             LostFocus="DEBUG_RecordingTripIDTextBox_LostFocus"
+                             />
                 </StackPanel>
             </PivotItem>
             <PivotItem Header="Maint. Tasks">

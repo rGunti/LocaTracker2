@@ -130,5 +130,20 @@ namespace LocaTracker2.Views
                 RecordingMaxAccuracyTextBox_Loading(sender as FrameworkElement, null);
             }
         }
+
+        private void DEBUG_RecordingTripIDTextBox_Loading(FrameworkElement sender, object args)
+        {
+            ((TextBox)sender).Text = RecordingSettingsReader.Instance.RecordingTripID.ToString();
+        }
+
+        private void DEBUG_RecordingTripIDTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            int value;
+            if (int.TryParse(((TextBox)sender).Text, out value)) {
+                RecordingSettingsReader.Instance.MaxAccuracy = value;
+            } else {
+                DEBUG_RecordingTripIDTextBox_Loading(sender as FrameworkElement, null);
+            }
+        }
     }
 }
