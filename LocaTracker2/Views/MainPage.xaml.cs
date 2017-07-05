@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -31,8 +32,16 @@ namespace LocaTracker2.Views
 
         DispatcherTimer
             clockTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(250) },
-            gpsTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(2500) }
+            gpsTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(2500) },
+            statusIndicatorTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) }
         ;
+
+        static StatusIndicatorState
+            accuracyState = StatusIndicatorState.Off,
+            batteryState = StatusIndicatorState.Off,
+            recordingState = StatusIndicatorState.Off
+        ;
+        AppBarButton[] statusIndicatorElements;
 
         public MainPage()
         {
@@ -43,11 +52,42 @@ namespace LocaTracker2.Views
             unitSettings = UnitSettingsReader.Instance;
             useImperialUnits = unitSettings.UseImperialUnits;
 
+            statusIndicatorElements = new AppBarButton[]
+            {
+                BatteryStatusIndicator,
+                AccuracyStatusIndicator,
+                RecordButton
+            };
+            BatteryStatusIndicator.Tag = batteryState;
+            AccuracyStatusIndicator.Tag = accuracyState;
+            RecordButton.Tag = recordingState;
+
             clockTimer.Tick += ClockTimer_Tick;
             gpsTimer.Tick += GpsTimer_Tick;
+            statusIndicatorTimer.Tick += StatusIndicatorTimer_Tick;
 
             clockTimer.Start();
             gpsTimer.Start();
+            statusIndicatorTimer.Start();
+        }
+
+        private void StatusIndicatorTimer_Tick(object sender, object e)
+        {
+            foreach (AppBarButton indicator in statusIndicatorElements)
+            {
+                StatusIndicatorState state = (StatusIndicatorState)indicator.Tag;
+                Brush brush = state.GetBrush();
+
+                if (state.IsBlinking()) {
+                    if (indicator.Background == brush) {
+                        indicator.Background = StatusIndicatorStateExtesions.DefaultBrush;
+                    } else {
+                        indicator.Background = brush;
+                    }
+                } else {
+                    indicator.Background = brush;
+                }
+            }
         }
 
         private async void GpsRecorder_OnPositionUpdate(Db.Objects.Point point, bool wasRecorded)
@@ -62,7 +102,14 @@ namespace LocaTracker2.Views
 
         private void GpsTimer_Tick(object sender, object e)
         {
-
+            if (GpsRecorder.Instance.CurrentPosition != null)
+            {
+                var p = GpsRecorder.Instance.CurrentPosition;
+                SetAccuracy(p.Accuracy);
+            } else
+            {
+                SetAccuracy(double.NaN);
+            }
         }
 
         private void ClockTimer_Tick(object sender, object e)
@@ -152,14 +199,19 @@ namespace LocaTracker2.Views
         public void SetAccuracy(double accuracy)
         {
             IconElement iconAccuracy;
-            if (accuracy > 50) iconAccuracy = bar0;
-            else if (accuracy > 25) iconAccuracy = bar1;
-            else if (accuracy > 15) iconAccuracy = bar2;
-            else if (accuracy > 5) iconAccuracy = bar3;
-            else iconAccuracy = bar4;
+            if (double.IsNaN(accuracy)) { iconAccuracy = barN; accuracyState = StatusIndicatorState.CritError; }
+            else if (accuracy > 50) { iconAccuracy = bar0; accuracyState = StatusIndicatorState.CritError; }
+            else if (accuracy > 25) { iconAccuracy = bar1; accuracyState = StatusIndicatorState.WarnInfo; }
+            else if (accuracy > 15) { iconAccuracy = bar2; accuracyState = StatusIndicatorState.Warning; }
+            else if (accuracy > 5) { iconAccuracy = bar3; accuracyState = StatusIndicatorState.Ok; }
+            else { iconAccuracy = bar4; accuracyState = StatusIndicatorState.Ok; }
 
             AccuracyStatusIndicator.Icon = iconAccuracy;
-            AccuracyStatusIndicator.Label = $"{Convert.ToChar(177)} {accuracy:0} m";
+            AccuracyStatusIndicator.Tag = accuracyState;
+            if (double.IsNaN(accuracy))
+                AccuracyStatusIndicator.Label = $"No Data";
+            else
+                AccuracyStatusIndicator.Label = $"{Convert.ToChar(177)} {accuracy:0} m";
         }
         #endregion UI Data Modification Methods
 

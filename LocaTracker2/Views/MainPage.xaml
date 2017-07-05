@@ -13,6 +13,7 @@
             <AppBarButton x:Name="BatteryStatusIndicator"
                           Label="- %"
                           IsTapEnabled="False"
+                          IsHitTestVisible="False"
                           >
                 <AppBarButton.Icon>
                     <BitmapIcon UriSource="ms-appx:///Assets/Icons/Battery/battery0.png" />
@@ -22,6 +23,7 @@
                           Label="&#177; - m"
                           Icon="Map"
                           IsTapEnabled="False"
+                          IsHitTestVisible="False"
                           />
             <AppBarSeparator />
             <AppBarButton x:Name="RecordButton"

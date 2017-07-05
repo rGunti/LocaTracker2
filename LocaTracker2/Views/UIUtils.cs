@@ -15,7 +15,8 @@ namespace LocaTracker2.Views
         Info,           // Green Blinking
         WarnInfo,       // Yellow Blinking
         Warning,        // Yellow
-        Error           // Red
+        Error,          // Red
+        CritError       // Red Blinking
     }
 
     public static class StatusIndicatorStateExtesions
@@ -44,12 +45,28 @@ namespace LocaTracker2.Views
                     return warningBrush;
 
                 case StatusIndicatorState.Error:
+                case StatusIndicatorState.CritError:
                     return errorBrush;
 
                 case StatusIndicatorState.Off:
                 default:
-                    return defaultBrush
+                    return defaultBrush;
             }
         }
+
+        public static bool IsBlinking(this StatusIndicatorState state)
+        {
+            switch (state)
+            {
+                case StatusIndicatorState.Info:
+                case StatusIndicatorState.WarnInfo:
+                case StatusIndicatorState.CritError:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static Brush DefaultBrush { get { return defaultBrush; } }
     }
 }
