@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -37,6 +38,17 @@ namespace LocaTracker2.Views
             bar4 = new SymbolIcon(Symbol.FourBars)
         ;
         #endregion
+
+        #region Brushes
+        static Brush
+            defaultBrush = null,
+            controlBrush = new SolidColorBrush(Color.FromArgb(255, 0, 160, 0)),
+            warningBrush = new SolidColorBrush(Color.FromArgb(255, 255, 125, 0)),
+            errorBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)),
+            disabledBrush = new SolidColorBrush(Color.FromArgb(255, 100, 100, 100)),
+            whiteBrush = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255))
+        ;
+        #endregion Brushes
 
         private UnitSettingsReader unitSettings;
         private bool useImperialUnits;
