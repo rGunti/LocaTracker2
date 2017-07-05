@@ -90,5 +90,8 @@ namespace LocaTracker2.Gps
         }
 
         private static double ConvertToRad(double val) { return (Math.PI / 180) * val; }
+
+        public static double ConvertNullableToNormal(double? d, double defaultValue = 0) { return (d.HasValue) ? d.Value : defaultValue; }
+        public static double PreventNaN(double d, double defaultValue = 0) { return (double.IsNaN(d)) ? defaultValue : d; }
     }
 }

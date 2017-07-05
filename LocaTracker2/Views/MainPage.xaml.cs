@@ -1,10 +1,12 @@
 ﻿using LocaTracker2.Gps;
+using LocaTracker2.Logic;
 using LocaTracker2.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -24,22 +26,54 @@ namespace LocaTracker2.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        #region Symbol Icons
+        static readonly SymbolIcon
+            barN = new SymbolIcon(Symbol.Map),
+            bar0 = new SymbolIcon(Symbol.ZeroBars),
+            bar1 = new SymbolIcon(Symbol.OneBar),
+            bar2 = new SymbolIcon(Symbol.TwoBars),
+            bar3 = new SymbolIcon(Symbol.ThreeBars),
+            bar4 = new SymbolIcon(Symbol.FourBars)
+        ;
+        #endregion
+
         private UnitSettingsReader unitSettings;
         private bool useImperialUnits;
 
         DispatcherTimer
-            clockTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(250) }
+            clockTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(250) },
+            gpsTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(2500) }
         ;
 
         public MainPage()
         {
             this.InitializeComponent();
 
+            GpsRecorder.Instance.OnPositionUpdate += GpsRecorder_OnPositionUpdate;
+
             unitSettings = UnitSettingsReader.Instance;
             useImperialUnits = unitSettings.UseImperialUnits;
 
             clockTimer.Tick += ClockTimer_Tick;
+            gpsTimer.Tick += GpsTimer_Tick;
+
             clockTimer.Start();
+            gpsTimer.Start();
+        }
+
+        private async void GpsRecorder_OnPositionUpdate(Db.Objects.Point point, bool wasRecorded)
+        {
+            await Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                SetSpeed(point.Speed);
+                SetAltitude(point.Altitude);
+                SetAccuracy(point.Accuracy);
+            });
+        }
+
+        private void GpsTimer_Tick(object sender, object e)
+        {
+
         }
 
         private void ClockTimer_Tick(object sender, object e)
@@ -100,6 +134,19 @@ namespace LocaTracker2.Views
             DateTime utcTime = TimeZoneInfo.ConvertTime(currentTime, TimeZoneInfo.Utc);
             LocalTimeLabel.Text = $"{currentTime:HH:mm:ss}";
             UtcTimeLabel.Text = $"{utcTime:HH:mm:ss}";
+        }
+
+        public void SetAccuracy(double accuracy)
+        {
+            IconElement iconAccuracy;
+            if (accuracy > 50) iconAccuracy = bar0;
+            else if (accuracy > 25) iconAccuracy = bar1;
+            else if (accuracy > 15) iconAccuracy = bar2;
+            else if (accuracy > 5) iconAccuracy = bar3;
+            else iconAccuracy = bar4;
+
+            AccuracyStatusIndicator.Icon = iconAccuracy;
+            AccuracyStatusIndicator.Label = $"{Convert.ToChar(177)} {accuracy:0} m";
         }
         #endregion UI Data Modification Methods
 

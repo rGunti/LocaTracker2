@@ -97,8 +97,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Logic\GpsRecorder.cs" />
     <Compile Include="Settings\MaintenanceTask\BaseMaintenanceTask.cs" />
     <Compile Include="Settings\MaintenanceTask\DistanceRecalculationTask.cs" />
+    <Compile Include="Settings\RecordingSettingsReader.cs" />
     <Compile Include="Settings\SettingsReader.cs" />
     <Compile Include="Settings\UnitSettingsReader.cs" />
     <Compile Include="Views\Dialogs\CreateTripDialog.xaml.cs">

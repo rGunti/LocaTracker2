@@ -26,7 +26,7 @@ namespace LocaTracker2.Gps
         protected bool settingUp = false;
 
         #region Setup
-        protected async Task InitAsync()
+        public async Task InitAsync()
         {
             settingUp = true;
 
