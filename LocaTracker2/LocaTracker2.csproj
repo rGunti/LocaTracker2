@@ -113,6 +113,9 @@
     <Compile Include="Views\Dialogs\ExecuteMaintenanceTaskDialog.xaml.cs">
       <DependentUpon>ExecuteMaintenanceTaskDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\MissingPermissionDialog.xaml.cs">
+      <DependentUpon>MissingPermissionDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\ProcessingDialog.xaml.cs">
       <DependentUpon>ProcessingDialog.xaml</DependentUpon>
     </Compile>
@@ -167,6 +170,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\ExecuteMaintenanceTaskDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\MissingPermissionDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
