@@ -11,7 +11,9 @@
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton x:Name="BatteryStatusIndicator"
-                          Label="- %">
+                          Label="- %"
+                          IsTapEnabled="False"
+                          >
                 <AppBarButton.Icon>
                     <BitmapIcon UriSource="ms-appx:///Assets/Icons/Battery/battery0.png" />
                 </AppBarButton.Icon>
@@ -19,11 +21,13 @@
             <AppBarButton x:Name="AccuracyStatusIndicator"
                           Label="&#177; - m"
                           Icon="Map"
+                          IsTapEnabled="False"
                           />
             <AppBarSeparator />
             <AppBarButton x:Name="RecordButton"
                           Label="Record"
                           Icon="Memo"
+                          Click="RecordButton_Click"
                           />
 
             <CommandBar.SecondaryCommands>

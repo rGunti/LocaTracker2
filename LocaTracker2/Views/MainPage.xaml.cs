@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -95,6 +96,23 @@ namespace LocaTracker2.Views
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(SettingsPage), this);
+        }
+
+        private void RecordButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (GpsRecorder.Instance.IsRecording)
+            {
+                Task.Run(() => {
+                    GpsRecorder.Instance.EndRecording();
+                });
+            } else {
+                Task.Run(() => {
+                    if (!GpsRecorder.Instance.StartRecording())
+                    {
+                        // TODO: Show Message Box
+                    }
+                });
+            }
         }
 
         private void Page_Loading(FrameworkElement sender, object args)
