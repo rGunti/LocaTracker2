@@ -1,5 +1,6 @@
 ﻿using LocaTracker2.Gps;
 using LocaTracker2.Logging.ETW;
+using LocaTracker2.Logic;
 using LocaTracker2.Settings;
 using LocaTracker2.Settings.MaintenanceTask;
 using LocaTracker2.Views.Dialogs;
@@ -86,9 +87,13 @@ namespace LocaTracker2.Views
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
-        private void ExecuteMaintRecalculation_Click(object sender, RoutedEventArgs e)
+        private async void ExecuteMaintRecalculation_Click(object sender, RoutedEventArgs e)
         {
-            ExecuteMaintenanceTask(new DistanceRecalculationTask());
+            if (GpsRecorder.Instance.IsRecording) {
+                await new TripListBlockedDialog().ShowAsync();
+            } else {
+                ExecuteMaintenanceTask(new DistanceRecalculationTask());
+            }
         }
 
         private void UseImperialUnitsToggleSwitch_Loading(FrameworkElement sender, object args)

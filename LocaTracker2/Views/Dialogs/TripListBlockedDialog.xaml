@@ -6,9 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="Trip List blocked"
+    Title="Recording in process"
     PrimaryButtonText="OK">
     <Grid>
-        <TextBlock Text="You cannot open the List list while recording." />
+        <TextBlock Text="You cannot do this while recording." />
     </Grid>
 </ContentDialog>
