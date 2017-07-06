@@ -82,9 +82,6 @@ namespace LocaTracker2.Views
                 AccuracyStatusIndicator,
                 RecordButton
             };
-            BatteryStatusIndicator.Tag = batteryState;
-            AccuracyStatusIndicator.Tag = accuracyState;
-            RecordButton.Tag = recordingState;
 
             clockTimer.Tick += ClockTimer_Tick;
             gpsTimer.Tick += GpsTimer_TickAsync;
@@ -106,6 +103,10 @@ namespace LocaTracker2.Views
 
         private void RestoreLastStoredValues()
         {
+            BatteryStatusIndicator.Tag = batteryState;
+            AccuracyStatusIndicator.Tag = accuracyState;
+            RecordButton.Tag = recordingState;
+
             AccuracyStatusIndicator.Label = lsv_accuracy;
             SpeedLabel.Text = lsv_mainSpeed;
             AlternativeUnitSpeedLabel.Text = lsv_secSpeed;
@@ -114,6 +115,7 @@ namespace LocaTracker2.Views
             DistanceLabel.Text = lsv_distance;
 
             SetTime(DateTime.UtcNow);
+            SetBatteryReport();
         }
 
         private void UnitSettingsReader_OnSettingsChanged(string key, object newValue)
@@ -128,10 +130,7 @@ namespace LocaTracker2.Views
         private async void BatteryTimer_Tick(object sender, object e)
         {
             await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
-                var percentage = BatteryDataFetcher.Instance.BatteryPercentage;
-                var icon = BatteryDataFetcher.GetIcon(percentage, BatteryDataFetcher.Instance.IsBatteryCharging);
-
-                SetBatteryReport(icon, percentage);
+                SetBatteryReport();
             });
         }
 
@@ -341,6 +340,14 @@ namespace LocaTracker2.Views
             }
 
             RecordButton.Tag = recordingState;
+        }
+
+        public void SetBatteryReport()
+        {
+            var percentage = BatteryDataFetcher.Instance.BatteryPercentage;
+            var icon = BatteryDataFetcher.GetIcon(percentage, BatteryDataFetcher.Instance.IsBatteryCharging);
+
+            SetBatteryReport(icon, percentage);
         }
 
         public void SetBatteryReport(BitmapIcon icon, double? battery) {
