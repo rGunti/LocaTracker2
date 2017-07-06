@@ -20,6 +20,8 @@ namespace LocaTracker2.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        static LocaTrackerEventSource log = LocaTrackerEventSource.Instance;
+
         #region Symbol Icons
         static readonly SymbolIcon
             barN = new SymbolIcon(Symbol.Map),
@@ -64,6 +66,8 @@ namespace LocaTracker2.Views
 
         public MainPage()
         {
+            log.Verbose("Initializing Main Page...");
+
             this.InitializeComponent();
 
             GpsRecorder.Instance.OnPositionUpdate += GpsRecorder_OnPositionUpdate;
@@ -97,7 +101,7 @@ namespace LocaTracker2.Views
 
         private void Frame_Navigating(object sender, Windows.UI.Xaml.Navigation.NavigatingCancelEventArgs e)
         {
-            LocaTrackerEventSource.Instance.Verbose($"{sender.GetType()}");
+            log.Verbose($"{sender.GetType()}");
         }
 
         private void RestoreLastStoredValues()
