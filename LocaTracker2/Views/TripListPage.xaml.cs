@@ -47,15 +47,25 @@ namespace LocaTracker2.Views
             e.Handled = true;
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loading(FrameworkElement sender, object args)
         {
-            ReloadTripList();
+            LoadingProgressBar.Visibility = Visibility.Visible;
+            await Task.Run(() => {
+                ReloadTripList();
+            });
         }
 
-        private void ReloadTripList()
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        { }
+
+        private async void ReloadTripList()
         {
             using (var db = new LocaTrackerDbContext()) {
-                TripListView.ItemsSource = db.Trips.ToList();
+                List<Trip> tripList = db.Trips.ToList();
+                await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
+                    TripListView.ItemsSource = tripList;
+                    LoadingProgressBar.Visibility = Visibility.Collapsed;
+                });
             }
         }
 

@@ -41,6 +41,14 @@ namespace LocaTracker2.Views
             SystemNavigationManager.GetForCurrentView().BackRequested += ListDetailPage_BackRequested;
         }
 
+        private async void Page_Loading(FrameworkElement sender, object args)
+        {
+            LoadingProgressBar.Visibility = Visibility.Visible;
+            await Task.Run(() => {
+
+            });
+        }
+
         private void ListDetailPage_BackRequested(object sender, BackRequestedEventArgs e)
         {
             Frame.Navigate(typeof(TripListPage));
@@ -69,9 +77,8 @@ namespace LocaTracker2.Views
                     }
                     await Task.Delay(150);
                     await dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
-                        //editorTrip.Sections = sections.ToList();
+                        LoadingProgressBar.Visibility = Visibility.Collapsed;
                         TripSectionList.ItemsSource = sections;
-                        //LoadingTripSectionsProgressBar.Visibility = Visibility.Collapsed;
                     });
                 }
             });

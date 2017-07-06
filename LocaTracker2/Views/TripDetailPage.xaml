@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:obj="using:LocaTracker2.Db.Objects"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loading="Page_Loading">
     
     <Page.BottomAppBar>
         <CommandBar>
@@ -58,42 +59,45 @@
                 </StackPanel>
             </PivotItem>
             <PivotItem Header="Sections">
-                <ListView x:Name="TripSectionList"
+                <StackPanel>
+                    <ProgressBar x:Name="LoadingProgressBar" IsIndeterminate="True" />
+                    <ListView x:Name="TripSectionList"
                               HorizontalContentAlignment="Stretch"
                               ScrollViewer.VerticalScrollBarVisibility="Auto"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                               DataContext="{Binding Sections}"
                               >
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid HorizontalAlignment="Stretch">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="40" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding SectionDescription}" 
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Stretch">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="40" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding SectionDescription}" 
                                            Grid.Row="0"
                                            Grid.RowSpan="2"
                                            TextAlignment="Left"
                                            VerticalAlignment="Center"
                                            />
-                                <TextBlock Text="{Binding SectionDistanceString}"
+                                    <TextBlock Text="{Binding SectionDistanceString}"
                                            FontSize="10"
                                            Grid.Column="1"
                                            TextAlignment="Right"
                                            />
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
             </PivotItem>
         </Pivot>
     </Grid>
