@@ -20,7 +20,11 @@ namespace LocaTracker2.Gps
             /// <summary>
             /// Converts Distance in Meters [m] to Yards [yd]
             /// </summary>
-            public static double ConvertMeterToYard(double meters) { return meters * 1.0936; }
+            public static double ConvertMeterToYard(double meters) { return meters * 1.09361; }
+            /// <summary>
+            /// Converts Distance in Yards [yd] to Meters [m]
+            /// </summary>
+            public static double ConvertYardToMeter(double yards) { return yards / 1.09361; }
             /// <summary>
             /// Converts Distance in Meters [m] to Feet [ft]
             /// </summary>
@@ -30,6 +34,10 @@ namespace LocaTracker2.Gps
             /// Converts Distance in Kilometers [km] to miles [mi]
             /// </summary>
             public static double ConvertKMtoMile(double km) { return km * 0.62137; }
+            /// <summary>
+            /// Converts Distance in miles [mi] to Kilometers [km]
+            /// </summary>
+            public static double ConvertMilesToKM(double miles) { return miles / 0.62137; }
 
             /// <summary>
             /// Converts Speed in Miles per Hour [mph] to Meters per Second [m/s]

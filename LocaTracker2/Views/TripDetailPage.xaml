@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:obj="using:LocaTracker2.Db.Objects"
+    xmlns:conv="using:LocaTracker2.Converter"
     mc:Ignorable="d"
     Loading="Page_Loading">
     
@@ -28,6 +29,10 @@
                           />
         </CommandBar>
     </Page.BottomAppBar>
+
+    <Page.Resources>
+        <conv:DistanceValueConverter x:Key="DistanceValueConverter" x:Name="DistanceValueConverter" />
+    </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Pivot Title="Trip Detail">
@@ -88,7 +93,7 @@
                                            TextAlignment="Left"
                                            VerticalAlignment="Center"
                                            />
-                                    <TextBlock Text="{Binding SectionDistanceString}"
+                                    <TextBlock Text="{Binding SectionDistance, Converter={StaticResource DistanceValueConverter}}"
                                            FontSize="10"
                                            Grid.Column="1"
                                            TextAlignment="Right"
