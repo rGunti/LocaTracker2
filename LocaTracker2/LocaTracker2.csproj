@@ -102,6 +102,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Battery\BatteryDataFetcher.cs" />
     <Compile Include="Logic\GeoTimeZoneUtils.cs" />
     <Compile Include="Logic\GpsRecorder.cs" />
     <Compile Include="Settings\MaintenanceTask\BaseMaintenanceTask.cs" />

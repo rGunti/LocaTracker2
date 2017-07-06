@@ -1,4 +1,5 @@
-﻿using LocaTracker2.Gps;
+﻿using LocaTracker2.Battery;
+using LocaTracker2.Gps;
 using LocaTracker2.Logging.ETW;
 using LocaTracker2.Logic;
 using LocaTracker2.Settings;
@@ -50,7 +51,8 @@ namespace LocaTracker2.Views
         DispatcherTimer
             clockTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(250) },
             gpsTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(2500) },
-            statusIndicatorTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) }
+            statusIndicatorTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) },
+            batteryTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(5000) }
         ;
 
         static StatusIndicatorState
@@ -83,12 +85,14 @@ namespace LocaTracker2.Views
             clockTimer.Tick += ClockTimer_Tick;
             gpsTimer.Tick += GpsTimer_TickAsync;
             statusIndicatorTimer.Tick += StatusIndicatorTimer_Tick;
+            batteryTimer.Tick += BatteryTimer_Tick;
 
             RestoreLastStoredValues();
 
             clockTimer.Start();
             gpsTimer.Start();
             statusIndicatorTimer.Start();
+            batteryTimer.Start();
         }
 
         private void Frame_Navigating(object sender, Windows.UI.Xaml.Navigation.NavigatingCancelEventArgs e)
@@ -115,6 +119,16 @@ namespace LocaTracker2.Views
                 useImperialUnits = (bool)newValue;
                 SetUnitLabels(useImperialUnits);
             }
+        }
+
+        private async void BatteryTimer_Tick(object sender, object e)
+        {
+            await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
+                var percentage = BatteryDataFetcher.Instance.BatteryPercentage;
+                var icon = BatteryDataFetcher.GetIcon(percentage, BatteryDataFetcher.Instance.IsBatteryCharging);
+
+                SetBatteryReport(icon, percentage);
+            });
         }
 
         private void StatusIndicatorTimer_Tick(object sender, object e)
@@ -323,6 +337,26 @@ namespace LocaTracker2.Views
             }
 
             RecordButton.Tag = recordingState;
+        }
+
+        public void SetBatteryReport(BitmapIcon icon, double? battery) {
+            BatteryStatusIndicator.Icon = icon;
+            if (battery.HasValue) {
+                BatteryStatusIndicator.Label = $"{battery} %";
+
+                if (BatteryDataFetcher.Instance.IsBatteryCharging) {
+                    batteryState = StatusIndicatorState.Info;
+                } else {
+                    if (battery <= 10) batteryState = StatusIndicatorState.CritError;
+                    else if (battery <= 25) batteryState = StatusIndicatorState.Warning;
+                    else batteryState = StatusIndicatorState.Off;
+                }
+            } else {
+                BatteryStatusIndicator.Label = "No Battery";
+                batteryState = StatusIndicatorState.Off;
+            }
+
+            BatteryStatusIndicator.Tag = batteryState;
         }
         #endregion UI Data Modification Methods
 

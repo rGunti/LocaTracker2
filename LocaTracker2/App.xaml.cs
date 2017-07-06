@@ -1,4 +1,5 @@
-﻿using LocaTracker2.Db;
+﻿using LocaTracker2.Battery;
+using LocaTracker2.Db;
 using LocaTracker2.Logging.ETW;
 using LocaTracker2.Logic;
 using MetroLog;
@@ -53,6 +54,7 @@ namespace LocaTracker2
                 db.Database.Migrate();
             }
 
+            BatteryDataFetcher.Initialize();
             GpsRecorder.Instance.InitAsync();
         }
 
