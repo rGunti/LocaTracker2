@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -176,6 +177,17 @@ namespace LocaTracker2.Views
         {
             TrackingSettingsReader.Instance.SpeedWarningEnabled = ((ToggleSwitch)sender).IsOn;
             UseWarnSpeedToggleSwitch_Loading(sender as FrameworkElement, null);
+        }
+
+        private void LoggingInfoTextBlock_Loading(FrameworkElement sender, object args)
+        {
+            ((TextBlock)sender).Text = Logging.ETW.LocaTrackerEventSource.Instance.Guid.ToString();
+        }
+
+        private void VersionTextBlock_Loading(FrameworkElement sender, object args)
+        {
+            var version = Package.Current.Id.Version;
+            ((TextBlock)sender).Text = $"Version {version.Major}.{version.Minor}.{version.Revision}.{version.Build}";
         }
     }
 }

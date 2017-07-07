@@ -95,6 +95,20 @@
                             />
                 </StackPanel>
             </PivotItem>
+            <PivotItem Header="About this app">
+                <StackPanel>
+                    <TextBlock x:Name="VersionTextBlock" TextWrapping="WrapWholeWords" FontSize="20" Loading="VersionTextBlock_Loading">
+                        Version 0.1
+                    </TextBlock>
+                    <TextBlock FontSize="15" TextWrapping="WrapWholeWords">
+                        Copyright © 2017, Raphael "rGunti" Guntersweiler
+                    </TextBlock>
+                    <TextBlock Text="Logging GUID:" />
+                    <TextBlock x:Name="LoggingInfoTextBlock" FontFamily="Consolas" Loading="LoggingInfoTextBlock_Loading">
+                        {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
+                    </TextBlock>
+                </StackPanel>
+            </PivotItem>
         </Pivot>
     </Grid>
 </Page>
