@@ -118,7 +118,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20*" />
                 <ColumnDefinition Width="10*" />
-                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="10*" />
                 <ColumnDefinition Width="20*" />
                 <ColumnDefinition Width="10*" />
             </Grid.ColumnDefinitions>
@@ -126,6 +126,21 @@
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
+
+            <Image x:Name="CompassImage"
+                   Grid.Row="0"
+                   Grid.RowSpan="2"
+                   Grid.Column="2"
+                   Source="ms-appx:///Assets/Compass/compass.png"
+                   Stretch="Uniform"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   RenderTransformOrigin="0.5, 0.5"
+                   >
+                <Image.RenderTransform>
+                    <RotateTransform Angle="0" />
+                </Image.RenderTransform>
+            </Image>
 
             <TextBlock x:Name="AltitudeLabel"
                        Grid.Column="0"

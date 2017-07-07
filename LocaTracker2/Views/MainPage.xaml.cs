@@ -58,6 +58,8 @@ namespace LocaTracker2.Views
         private UnitSettingsReader unitSettings;
         private bool useImperialUnits;
 
+        private RotateTransform compassRotateImage;
+
         DispatcherTimer
             clockTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(250) },
             gpsTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(2500) },
@@ -86,6 +88,8 @@ namespace LocaTracker2.Views
             
             unitSettings = UnitSettingsReader.Instance;
             useImperialUnits = unitSettings.UseImperialUnits;
+
+            compassRotateImage = CompassImage.RenderTransform as RotateTransform;
 
             statusIndicatorElements = new AppBarButton[]
             {
@@ -191,6 +195,7 @@ namespace LocaTracker2.Views
                 SetSpeed(point.Speed);
                 SetAltitude(point.Altitude);
                 SetAccuracy(point.Accuracy);
+                SetHeading(point.Heading);
 
                 SetRecordingState(GpsRecorder.Instance.IsRecording, recordingPausedReason);
             });
@@ -409,6 +414,15 @@ namespace LocaTracker2.Views
             }
 
             BatteryStatusIndicator.Tag = batteryState;
+        }
+
+        public void SetHeading(double heading)
+        {
+            if (!double.IsNaN(heading)) {
+                compassRotateImage.Angle = 360 - heading;
+            } else {
+                compassRotateImage.Angle = 0;
+            }
         }
         #endregion UI Data Modification Methods
     }
