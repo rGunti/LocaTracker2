@@ -179,11 +179,6 @@ namespace LocaTracker2.Views
             UseWarnSpeedToggleSwitch_Loading(sender as FrameworkElement, null);
         }
 
-        private void LoggingInfoTextBlock_Loading(FrameworkElement sender, object args)
-        {
-            ((TextBlock)sender).Text = Logging.ETW.LocaTrackerEventSource.Instance.Guid.ToString();
-        }
-
         private void VersionTextBlock_Loading(FrameworkElement sender, object args)
         {
             var version = Package.Current.Id.Version;
