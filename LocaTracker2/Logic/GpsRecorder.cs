@@ -1,6 +1,8 @@
 ﻿using LocaTracker2.Db;
 using LocaTracker2.Db.Objects;
 using LocaTracker2.Gps;
+using LocaTracker2.Logging;
+using LocaTracker2.Logging.ETW;
 using LocaTracker2.Settings;
 using System;
 using System.Collections.Generic;
@@ -34,11 +36,17 @@ namespace LocaTracker2.Logic
 
         public bool StartRecording()
         {
+            StorageFileLogger.Instance.I(this, "Recorder start has been invoked");
+
             dbContext = LocaTrackerDbContext.GetNonTrackingInstance();
 
             CurrentRecordingTrip = dbContext.Trips.FirstOrDefault(t => t.TripID == RecordingSettingsReader.Instance.RecordingTripID);
-            if (CurrentRecordingTrip == null) return false;
+            if (CurrentRecordingTrip == null) {
+                StorageFileLogger.Instance.E(this, $"The selected trip with ID {RecordingSettingsReader.Instance.RecordingTripID} could not be found! Recording aborted!");
+                return false;
+            }
 
+            StorageFileLogger.Instance.V(this, "Calculating Trip Distance...");
             CurrentTripSectionDistance = 0;
             CurrentTripDistance = 0;
             foreach (TripSection section in dbContext.TripSections.Where(s => s.TripID == RecordingSettingsReader.Instance.RecordingTripID)) {
@@ -58,21 +66,29 @@ namespace LocaTracker2.Logic
             CurrentRecordingTripSection = tripSection;
             CurrentPosition = null;
             IsRecording = true;
+
+            StorageFileLogger.Instance.I(this, "Preparation complete, recording started");
             return true;
         }
 
         public void EndRecording()
         {
+            StorageFileLogger.Instance.I(this, "Ending recording...");
+
             CurrentRecordingTripSection.Ended = DateTime.UtcNow;
             CurrentRecordingTripSection.StoredSectionDistance = CurrentTripSectionDistance;
             dbContext.Update(CurrentRecordingTripSection);
             dbContext.SaveChanges();
             dbContext.Dispose();
             IsRecording = false;
+
+            StorageFileLogger.Instance.I(this, "Recording has ended");
         }
 
         protected override void Locator_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
+            StorageFileLogger.Instance.V(this, "New Location recieved");
+
             Point point = GpsModelExtension.GetPointFromGpsTracker(args.Position.Coordinate);
             RecordingPausedReason reason = RecordingPausedReason.WasNot;
             double minSpeed = RecordingSettingsReader.Instance.MinSpeed;

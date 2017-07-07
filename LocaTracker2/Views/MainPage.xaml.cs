@@ -1,5 +1,6 @@
 ﻿using LocaTracker2.Battery;
 using LocaTracker2.Gps;
+using LocaTracker2.Logging;
 using LocaTracker2.Logging.ETW;
 using LocaTracker2.Logic;
 using LocaTracker2.Settings;
@@ -21,7 +22,7 @@ namespace LocaTracker2.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        static LocaTrackerEventSource log = LocaTrackerEventSource.Instance;
+        static StorageFileLogger log = StorageFileLogger.Instance;
 
         #region Brush
         static Brush
@@ -79,7 +80,7 @@ namespace LocaTracker2.Views
 
         public MainPage()
         {
-            log.Verbose("Initializing Main Page...");
+            log.V(this, "Initializing Main Page...");
 
             this.InitializeComponent();
 
@@ -117,7 +118,7 @@ namespace LocaTracker2.Views
 
         private void Frame_Navigating(object sender, Windows.UI.Xaml.Navigation.NavigatingCancelEventArgs e)
         {
-            log.Verbose($"{sender.GetType()}");
+            log.V(this, $"{sender.GetType()}");
         }
 
         private void RestoreLastStoredValues()

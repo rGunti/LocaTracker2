@@ -113,6 +113,12 @@
     <Compile Include="Units.cs" />
     <EmbeddedResource Include="Properties\LocaTracker2.Gps.rd.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LocaTracker2.Logging\LocaTracker2.Logging.csproj">
+      <Project>{603f2bc9-5df2-4300-ac2a-3165e978d0b8}</Project>
+      <Name>LocaTracker2.Logging</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

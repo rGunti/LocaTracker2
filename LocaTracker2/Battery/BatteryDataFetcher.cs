@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LocaTracker2.Logging;
+using System;
 using Windows.Devices.Power;
 using Windows.UI.Xaml.Controls;
 
@@ -58,10 +55,14 @@ namespace LocaTracker2.Battery
             battery = Windows.Devices.Power.Battery.AggregateBattery;
             battery.ReportUpdated += Battery_ReportUpdated;
             Battery_ReportUpdated(battery, null);
+
+            StorageFileLogger.Instance.I(this, "Battery Data Fetcher initialized");
         }
 
         private void Battery_ReportUpdated(Windows.Devices.Power.Battery sender, object args)
         {
+            StorageFileLogger.Instance.V(this, "Report Update recieved");
+
             BatteryReport report;
             if (args != null && args is BatteryReport) report = args as BatteryReport;
             else report = sender.GetReport();

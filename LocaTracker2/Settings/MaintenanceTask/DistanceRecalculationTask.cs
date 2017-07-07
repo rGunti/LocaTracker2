@@ -13,9 +13,7 @@ namespace LocaTracker2.Settings.MaintenanceTask
     {
         protected override void DoJob()
         {
-            using (var db = new LocaTrackerDbContext()) {
-                db.ChangeTracker.AutoDetectChangesEnabled = false;
-
+            using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
                 var sections = db.TripSections;
                 int counter = 0;
                 foreach (var section in sections) {
@@ -37,7 +35,7 @@ namespace LocaTracker2.Settings.MaintenanceTask
                     db.SaveChanges();
                     SetTaskResult(MaintenanceTaskResult.Success);
                 } catch (Exception ex) {
-                    LocaTrackerEventSource.Instance.Error(LoggingUtilities.GetExceptionMessage(ex));
+                    StorageFileLogger.Instance.E(this, LoggingUtilities.GetExceptionMessage(ex));
                     SetTaskResult(MaintenanceTaskResult.Failed);
                 }
             }

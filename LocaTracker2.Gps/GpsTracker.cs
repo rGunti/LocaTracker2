@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LocaTracker2.Logging;
+using LocaTracker2.Logging.ETW;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,9 +32,11 @@ namespace LocaTracker2.Gps
         #region Setup
         public async Task InitAsync()
         {
+            StorageFileLogger.Instance.I(this, "Initializing Tracker ...");
             settingUp = true;
 
             accessStatus = await Geolocator.RequestAccessAsync();
+            StorageFileLogger.Instance.V(this, $"Current State: {accessStatus}");
             switch (accessStatus)
             {
                 case GeolocationAccessStatus.Allowed:

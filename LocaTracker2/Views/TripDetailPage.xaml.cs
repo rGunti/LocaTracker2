@@ -41,12 +41,9 @@ namespace LocaTracker2.Views
             SystemNavigationManager.GetForCurrentView().BackRequested += ListDetailPage_BackRequested;
         }
 
-        private async void Page_Loading(FrameworkElement sender, object args)
+        private void Page_Loading(FrameworkElement sender, object args)
         {
             LoadingProgressBar.Visibility = Visibility.Visible;
-            await Task.Run(() => {
-
-            });
         }
 
         private void ListDetailPage_BackRequested(object sender, BackRequestedEventArgs e)

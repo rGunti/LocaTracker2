@@ -26,10 +26,10 @@ namespace LocaTracker2.Settings.MaintenanceTask
         public void Execute()
         {
             try {
-                LocaTrackerEventSource.Instance.Info($"Starting Maintenance Task {GetType().Name}...");
+                StorageFileLogger.Instance.I(this, $"Starting Maintenance Task {GetType().Name}...");
                 DoJob();
             } catch (Exception ex) {
-                LocaTrackerEventSource.Instance.Critical($"Error while executing Maint. Task {GetType().Name}. Detail:\n{LoggingUtilities.GetExceptionMessage(ex)}");
+                StorageFileLogger.Instance.E(this, $"Error while executing Maint. Task {GetType().Name}. Detail:\n{LoggingUtilities.GetExceptionMessage(ex)}");
                 SetTaskResult(MaintenanceTaskResult.Failed);
             }
         }

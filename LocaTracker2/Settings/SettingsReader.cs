@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LocaTracker2.Logging;
+using LocaTracker2.Logging.ETW;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,18 +26,23 @@ namespace LocaTracker2.Settings
         public delegate void OnSettingsChangedDelegate(string key, object newValue);
         public event OnSettingsChangedDelegate OnSettingsChanged;
 
-        protected SettingsReader() { InitializeSettingsValues(); }
+        protected SettingsReader() {
+            InitializeSettingsValues();
+            StorageFileLogger.Instance.I(this, "Settings Reader initialized");
+        }
 
         protected abstract void InitializeSettingsValues();
 
         protected void InitSettingsValue(string key, object defaultValue) {
-            if (!HasKey(key)) SetValue(key, defaultValue);
-            else
-            {
+            if (!HasKey(key)) {
+                StorageFileLogger.Instance.W(this, $" Key {key} missing, initializing...");
+                SetValue(key, defaultValue);
+            } else {
                 object value = GetValue(key);
                 if (value.GetType() != defaultValue.GetType())
                 {
                     // Settings Value will be overwritten if the types do not match
+                    StorageFileLogger.Instance.W(this, $" Key {key} is invalid, resetting...");
                     SetValue(key, defaultValue);
                 }
             }

@@ -1,5 +1,6 @@
 ﻿using LocaTracker2.Battery;
 using LocaTracker2.Db;
+using LocaTracker2.Logging;
 using LocaTracker2.Logging.ETW;
 using LocaTracker2.Logic;
 using LocaTracker2.Settings;
@@ -40,30 +41,29 @@ namespace LocaTracker2
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            LocaTrackerEventSource.Instance.Info("App is starting up...");
+            StorageFileLogger.Instance.I(this, "Logging is setup, App is starting up...");
+            this.UnhandledException += App_UnhandledException;
 
-            LogManagerFactory.DefaultConfiguration.AddTarget(
-                LogLevel.Trace,
-                LogLevel.Fatal,
-                new FileStreamingTarget() {
-                    RetainDays = 90
-                }
-            );
-            GlobalCrashHandler.Configure();
-
-            LocaTrackerEventSource.Instance.Info("Setting up Database...");
+            StorageFileLogger.Instance.I(this, "Setting up Database...");
             using (var db = new LocaTrackerDbContext()) {
                 db.Database.Migrate();
             }
 
-            LocaTrackerEventSource.Instance.Info("Setting up Configurations...");
+            StorageFileLogger.Instance.I(this, "Setting up Configuration...");
             UnitSettingsReader.InitializeSettings();
             TrackingSettingsReader.InitializeSettings();
             RecordingSettingsReader.InitializeSettings();
 
             LocaTrackerEventSource.Instance.Info("Setting up Device Systems...");
+            StorageFileLogger.Instance.I(this, "Setting up Device Systems...");
             BatteryDataFetcher.Initialize();
             GpsRecorder.Instance.InitAsync();
+        }
+
+        private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            StorageFileLogger.Instance.A(this, LoggingUtilities.GetExceptionMessage(e.Exception));
+            StorageFileLogger.Instance.Shutdown();
         }
 
         /// <summary>
