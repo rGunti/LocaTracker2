@@ -6,6 +6,7 @@ using LocaTracker2.Settings;
 using LocaTracker2.Views.Dialogs;
 using System;
 using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -21,6 +22,13 @@ namespace LocaTracker2.Views
     public sealed partial class MainPage : Page
     {
         static LocaTrackerEventSource log = LocaTrackerEventSource.Instance;
+
+        #region Brush
+        static Brush
+            defaultSpeedBrush = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)),
+            warningSpeedBrush = new SolidColorBrush(Color.FromArgb(255, 255, 185, 0))
+        ;
+        #endregion Brush
 
         #region Symbol Icons
         static readonly SymbolIcon
@@ -60,9 +68,12 @@ namespace LocaTracker2.Views
         static StatusIndicatorState
             accuracyState = StatusIndicatorState.Off,
             batteryState = StatusIndicatorState.Off,
-            recordingState = StatusIndicatorState.Off
+            recordingState = StatusIndicatorState.Off,
+
+            speedLabelState = StatusIndicatorState.White
         ;
         AppBarButton[] statusIndicatorElements;
+        TextBlock[] speedLabels;
 
         public MainPage()
         {
@@ -81,6 +92,10 @@ namespace LocaTracker2.Views
                 BatteryStatusIndicator,
                 AccuracyStatusIndicator,
                 RecordButton
+            };
+            speedLabels = new TextBlock[] {
+                SpeedLabel,
+                AlternativeUnitSpeedLabel
             };
 
             clockTimer.Tick += ClockTimer_Tick;
@@ -106,6 +121,9 @@ namespace LocaTracker2.Views
             BatteryStatusIndicator.Tag = batteryState;
             AccuracyStatusIndicator.Tag = accuracyState;
             RecordButton.Tag = recordingState;
+
+            SpeedLabel.Tag = speedLabelState;
+            AlternativeUnitSpeedLabel.Tag = speedLabelState;
 
             AccuracyStatusIndicator.Label = lsv_accuracy;
             SpeedLabel.Text = lsv_mainSpeed;
@@ -150,6 +168,18 @@ namespace LocaTracker2.Views
                     }
                 } else {
                     indicator.Background = brush;
+                }
+            }
+
+            foreach (TextBlock label in speedLabels) {
+                StatusIndicatorState state = (StatusIndicatorState)label.Tag;
+                Brush brush = state.GetBrush();
+
+                if (state.IsBlinking()) {
+                    if (blinkingIndicatorOn) label.Foreground = brush;
+                    else label.Foreground = StatusIndicatorStateExtesions.WhiteBrush;
+                } else {
+                    label.Foreground = brush;
                 }
             }
         }
@@ -254,11 +284,22 @@ namespace LocaTracker2.Views
 
         public void SetSpeed(double metricValue)
         {
+            bool speedWarningEnabled = TrackingSettingsReader.Instance.SpeedWarningEnabled;
+            double warningSpeed = TrackingSettingsReader.Instance.SpeedWarningMaxSpeed;
+
             metricValue = GpsUtilities.PreventNaN(metricValue);
             double kmh = GpsUtilities.ConvertMPStoKMH(metricValue);
             double mph = GpsUtilities.MetricImperialConverter.ConvertMPStoMPH(metricValue);
             SpeedLabel.Text = $"{(useImperialUnits ? mph : kmh),3:0}";
             AlternativeUnitSpeedLabel.Text = $"{(useImperialUnits ? kmh : mph):0}";
+
+            if (speedWarningEnabled && metricValue > warningSpeed) {
+                SpeedLabel.Tag = StatusIndicatorState.Warning;
+                AlternativeUnitSpeedLabel.Tag = StatusIndicatorState.Warning;
+            } else {
+                SpeedLabel.Tag = StatusIndicatorState.White;
+                AlternativeUnitSpeedLabel.Tag = StatusIndicatorState.White;
+            }
         }
 
         public void SetAltitude(double metricValue)
@@ -370,7 +411,5 @@ namespace LocaTracker2.Views
             BatteryStatusIndicator.Tag = batteryState;
         }
         #endregion UI Data Modification Methods
-
-
     }
 }

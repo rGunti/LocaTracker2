@@ -46,7 +46,7 @@
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
-    
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="90" />
@@ -68,7 +68,8 @@
                            TextAlignment="Right"
                            FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
                            FontSize="150"
-                           />
+                           >
+                </TextBlock>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />
@@ -87,7 +88,7 @@
                                FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
                                FontSize="50"
                                />
-                    
+
                     <TextBlock x:Name="AlternativeUnitSpeedLabel"
                                Grid.Column="0"
                                Grid.Row="0"
@@ -109,7 +110,7 @@
                 </Grid>
             </StackPanel>
         </Viewbox>
-        
+
         <!-- TOP -->
         <Grid Margin="10,10,10,10"
               VerticalAlignment="Top"

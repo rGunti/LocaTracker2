@@ -11,6 +11,7 @@ namespace LocaTracker2.Views
     public enum StatusIndicatorState
     {
         Off,            // None
+        White,          // White
         Ok,             // Green
         Info,           // Green Blinking
         WarnInfo,       // Yellow Blinking
@@ -36,6 +37,9 @@ namespace LocaTracker2.Views
         {
             switch (state)
             {
+                case StatusIndicatorState.White:
+                    return whiteBrush;
+
                 case StatusIndicatorState.Ok:
                 case StatusIndicatorState.Info:
                     return controlBrush;
@@ -68,5 +72,6 @@ namespace LocaTracker2.Views
         }
 
         public static Brush DefaultBrush { get { return defaultBrush; } }
+        public static Brush WhiteBrush { get { return whiteBrush; } }
     }
 }
