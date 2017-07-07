@@ -58,6 +58,9 @@ namespace LocaTracker2.Logging
         public void E(object source, string message) => Log(LogLevel.Error, source, message);
         public void E(Type sourceType, string message) => Log(LogLevel.Error, sourceType, message);
 
+        public void F(object source, string message) => Log(LogLevel.Failure, source, message);
+        public void F(Type sourceType, string message) => Log(LogLevel.Failure, sourceType, message);
+
         public void A(object source, string message) => Log(LogLevel.Always, source, message);
         public void A(Type sourceType, string message) => Log(LogLevel.Always, sourceType, message);
     }
