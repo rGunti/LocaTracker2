@@ -21,6 +21,9 @@ namespace LocaTracker2.Db
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=locatracker2.db");
+#if DEBUG
+            optionsBuilder.EnableSensitiveDataLogging();
+#endif
         }
 
         public static void InitDatabase()

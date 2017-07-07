@@ -68,7 +68,8 @@ namespace LocaTracker2.Views
             await Task.Run(async () => {
                 await Task.Delay(150);
                 using (var db = LocaTrackerDbContext.GetNonTrackingInstance()) {
-                    IEnumerable<TripSection> sections = db.TripSections.Where(s => s.TripID == editorTrip.TripID).ToList();
+                    int tripID = editorTrip.TripID;
+                    IEnumerable<TripSection> sections = db.TripSections.Where(s => s.TripID == tripID);
                     foreach (TripSection section in sections.Where(s => s.IsActive)) {
                         section.CalculateSectionDistance();
                     }
