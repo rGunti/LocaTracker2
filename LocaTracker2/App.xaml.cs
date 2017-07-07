@@ -2,6 +2,7 @@
 using LocaTracker2.Db;
 using LocaTracker2.Logging.ETW;
 using LocaTracker2.Logic;
+using LocaTracker2.Settings;
 using MetroLog;
 using MetroLog.Targets;
 using Microsoft.EntityFrameworkCore;
@@ -50,10 +51,17 @@ namespace LocaTracker2
             );
             GlobalCrashHandler.Configure();
 
+            LocaTrackerEventSource.Instance.Info("Setting up Database...");
             using (var db = new LocaTrackerDbContext()) {
                 db.Database.Migrate();
             }
 
+            LocaTrackerEventSource.Instance.Info("Setting up Configurations...");
+            UnitSettingsReader.InitializeSettings();
+            TrackingSettingsReader.InitializeSettings();
+            RecordingSettingsReader.InitializeSettings();
+
+            LocaTrackerEventSource.Instance.Info("Setting up Device Systems...");
             BatteryDataFetcher.Initialize();
             GpsRecorder.Instance.InitAsync();
         }

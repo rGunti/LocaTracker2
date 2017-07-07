@@ -150,5 +150,32 @@ namespace LocaTracker2.Views
                 DEBUG_RecordingTripIDTextBox_Loading(sender as FrameworkElement, null);
             }
         }
+
+        private void WarnSpeedTextBox_Loading(FrameworkElement sender, object args)
+        {
+            ((TextBox)sender).Text = Math.Floor(GpsUtilities.ConvertMPStoKMH(TrackingSettingsReader.Instance.SpeedWarningMaxSpeed)).ToString();
+        }
+
+        private void WarnSpeedTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double value;
+            if (double.TryParse(((TextBox)sender).Text, out value)) {
+                TrackingSettingsReader.Instance.SpeedWarningMaxSpeed = GpsUtilities.ConvertKMHtoMPS(value);
+            } else {
+                WarnSpeedTextBox_Loading(sender as FrameworkElement, null);
+            }
+        }
+
+        private void UseWarnSpeedToggleSwitch_Loading(FrameworkElement sender, object args)
+        {
+            ((ToggleSwitch)sender).IsOn = TrackingSettingsReader.Instance.SpeedWarningEnabled;
+            WarnSpeedTextBox.IsEnabled = TrackingSettingsReader.Instance.SpeedWarningEnabled;
+        }
+
+        private void UseWarnSpeedToggleSwitch_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TrackingSettingsReader.Instance.SpeedWarningEnabled = ((ToggleSwitch)sender).IsOn;
+            UseWarnSpeedToggleSwitch_Loading(sender as FrameworkElement, null);
+        }
     }
 }

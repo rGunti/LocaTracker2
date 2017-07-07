@@ -12,9 +12,13 @@ namespace LocaTracker2.Settings
         private static T instance;
         public static T Instance {
             get {
-                if (instance == null) instance = new T();
+                InitializeSettings();
                 return instance;
             }
+        }
+
+        public static void InitializeSettings() {
+            if (instance == null) instance = new T();
         }
 
         public delegate void OnSettingsChangedDelegate(string key, object newValue);

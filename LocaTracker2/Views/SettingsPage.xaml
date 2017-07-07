@@ -29,6 +29,27 @@
                                   />
                 </StackPanel>
             </PivotItem>
+            <PivotItem Header="Tracking Settings">
+                <StackPanel>
+                    <ToggleSwitch x:Name="UseWarnSpeedToggleSwitch"
+                                  OffContent="Speed Warning disabled"
+                                  OnContent="Speed Warning enabled"
+                                  Loading="UseWarnSpeedToggleSwitch_Loading"
+                                  LostFocus="UseWarnSpeedToggleSwitch_LostFocus"
+                                  />
+                    <TextBlock Text="When this feature is enabled you will recieve a warning if you're moving faster than the given speed."
+                               TextWrapping="WrapWholeWords"
+                               FontSize="12"
+                               />
+                    <TextBox x:Name="WarnSpeedTextBox"
+                             Header="Warn Speed in [km/h]"
+                             PlaceholderText="Speed in [km/h]"
+                             InputScope="Number"
+                             Loading="WarnSpeedTextBox_Loading"
+                             LostFocus="WarnSpeedTextBox_LostFocus"
+                             />
+                </StackPanel>
+            </PivotItem>
             <PivotItem Header="Recording Settings">
                 <StackPanel>
                     <TextBox x:Name="RecordingMinSpeedTextBox"
