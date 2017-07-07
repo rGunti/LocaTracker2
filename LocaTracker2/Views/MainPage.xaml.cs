@@ -333,7 +333,7 @@ namespace LocaTracker2.Views
         {
             if (!currentTime.HasValue) currentTime = DateTime.Now;
             LocalTimeLabel.Text = $"{currentTime.Value:HH:mm:ss}";
-            UtcTimeLabel.Text = $"{utcTime:HH:mm:ss}";
+            UtcTimeLabel.Text = $"{utcTime:HH:mm}";
 
             lsv_localTime = LocalTimeLabel.Text;
             lsv_utcTime = UtcTimeLabel.Text;
@@ -421,8 +421,10 @@ namespace LocaTracker2.Views
         {
             if (!double.IsNaN(heading)) {
                 compassRotateImage.Angle = 360 - heading;
+                CompassLabel.Text = $"{heading,-3}";
             } else {
                 compassRotateImage.Angle = 0;
+                CompassLabel.Text = "---";
             }
         }
         #endregion UI Data Modification Methods

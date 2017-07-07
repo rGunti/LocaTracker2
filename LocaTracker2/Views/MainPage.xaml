@@ -141,6 +141,15 @@
                     <RotateTransform Angle="0" />
                 </Image.RenderTransform>
             </Image>
+            <TextBlock x:Name="CompassLabel"
+                       Grid.Row="0"
+                       FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
+                       Grid.RowSpan="2"
+                       Grid.Column="2"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="---"
+                       />
 
             <TextBlock x:Name="AltitudeLabel"
                        Grid.Column="0"
@@ -156,8 +165,8 @@
                        Grid.Row="1"
                        Text="Altitude"
                        TextAlignment="Left"
-                       FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
-                       FontSize="20"
+                       VerticalAlignment="Top"
+                       FontSize="15"
                        />
             <TextBlock x:Name="AltitudeUnitLabel"
                        Grid.Column="1"
@@ -182,8 +191,8 @@
                        Grid.Row="1"
                        Text="Distance"
                        TextAlignment="Left"
-                       FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
-                       FontSize="20"
+                       VerticalAlignment="Top"
+                       FontSize="15"
                        />
             <TextBlock x:Name="DistanceUnitLabel"
                        Grid.Column="4"
@@ -200,8 +209,8 @@
               VerticalAlignment="Bottom"
               Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="15*" />
+                <ColumnDefinition Width="10*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -211,35 +220,33 @@
             <TextBlock Grid.Column="0"
                        Grid.Row="0"
                        Text="Local Time"
-                       TextAlignment="Center"
-                       FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
-                       FontSize="20"
+                       TextAlignment="Left"
+                       FontSize="15"
                        />
             <TextBlock x:Name="LocalTimeLabel"
                        Grid.Column="0"
                        Grid.Row="1"
                        Text="00:00:00"
-                       TextAlignment="Center"
+                       TextAlignment="Left"
                        FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
-                       FontSize="35"
-                       VerticalAlignment="Bottom"
+                       FontSize="45"
+                       VerticalAlignment="Center"
                        />
 
             <TextBlock Grid.Column="1"
                        Grid.Row="0"
                        Text="GMT Time"
-                       TextAlignment="Center"
-                       FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
-                       FontSize="20"
+                       TextAlignment="Right"
+                       FontSize="15"
                        />
             <TextBlock x:Name="UtcTimeLabel"
                        Grid.Column="1"
                        Grid.Row="1"
                        Text="00:00:00"
-                       TextAlignment="Center"
+                       TextAlignment="Right"
                        FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
-                       FontSize="35"
-                       VerticalAlignment="Bottom"
+                       FontSize="30"
+                       VerticalAlignment="Center"
                        />
         </Grid>
     </Grid>
