@@ -54,7 +54,9 @@ namespace LocaTracker2.Views
             lsv_localTime = "--:--:--",
             lsv_utcTime = "--:--:--",
             lsv_accuracy = "0"
-        ;        
+        ;
+
+        private DateTime initializedTimeStamp;
 
         private UnitSettingsReader unitSettings;
         private bool useImperialUnits;
@@ -81,6 +83,7 @@ namespace LocaTracker2.Views
         public MainPage()
         {
             log.V(this, "Initializing Main Page...");
+            initializedTimeStamp = DateTime.UtcNow;
 
             this.InitializeComponent();
 
@@ -157,8 +160,18 @@ namespace LocaTracker2.Views
             });
         }
 
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            clockTimer.Stop();
+            gpsTimer.Stop();
+            statusIndicatorTimer.Stop();
+            batteryTimer.Stop();
+        }
+
         private void StatusIndicatorTimer_Tick(object sender, object e)
         {
+            //log.V(this, $"INIT={initializedTimeStamp:HH:mm:ss.fff} - Status Indicator Tick");
+
             blinkingIndicatorOn = !blinkingIndicatorOn;
             foreach (AppBarButton indicator in statusIndicatorElements)
             {

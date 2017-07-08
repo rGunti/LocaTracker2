@@ -42,7 +42,12 @@ namespace LocaTracker2.Logging
             } catch { }
         }
 
-        protected override void ProcessEntry(string entry) => messageQueue.Enqueue(entry);
+        protected override void ProcessEntry(string entry) {
+            messageQueue.Enqueue(entry);
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(entry);
+#endif
+        }
 
         public void Shutdown() { isRunning = false; }
     }
