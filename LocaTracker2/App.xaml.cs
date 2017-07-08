@@ -4,25 +4,13 @@ using LocaTracker2.Logging;
 using LocaTracker2.Logging.ETW;
 using LocaTracker2.Logic;
 using LocaTracker2.Settings;
-using MetroLog;
-using MetroLog.Targets;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Tracing;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace LocaTracker2
@@ -40,6 +28,12 @@ namespace LocaTracker2
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+#if DEBUG
+            StorageFileLogger.Instance.MinLogLevel = LogLevel.Verbose;
+#else
+            StorageFileLogger.Instance.MinLogLevel = LogLevel.Warning;
+#endif
 
             StorageFileLogger.Instance.I(this, "Logging is setup, App is starting up...");
             this.UnhandledException += App_UnhandledException;

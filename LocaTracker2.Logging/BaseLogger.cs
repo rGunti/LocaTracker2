@@ -8,13 +8,13 @@ namespace LocaTracker2.Logging
 {
     public enum LogLevel
     {
-        Verbose,
-        Debug,
-        Info,
-        Warning,
-        Error,
-        Failure,
-        Always
+        Verbose = 0,
+        Debug   = 1,
+        Info    = 2,
+        Warning = 3,
+        Error   = 4,
+        Failure = 5,
+        Always  = 6
     }
 
     public abstract class BaseLogger<T> where T : BaseLogger<T>, new()
@@ -30,18 +30,21 @@ namespace LocaTracker2.Logging
         protected BaseLogger() { InitializeLogger(); }
         
         public bool UseUtcTimes { get; set; } = true;
+        public LogLevel MinLogLevel { get; set; }
 
         protected virtual void InitializeLogger() { }
 
         protected abstract void ProcessEntry(string entry);
 
         protected virtual string ComposeMessage(LogLevel level, Type source, string message) =>
-            $"{(UseUtcTimes ? DateTime.UtcNow : DateTime.Now):yyyy-MM-dd HH:mm:ss.ffff zzz}|{level,-7}|{source.Name}|{message}";
+            $"{(UseUtcTimes ? DateTime.UtcNow : DateTime.Now):yyyy-MM-dd HH:mm:ss.ffff zzz}|{level,-7}|{source.Name,-32}|{message}";
 
         public void Log(LogLevel level, object source, string message) => 
-            ProcessEntry(ComposeMessage(level, source.GetType(), message));
-        public void Log(LogLevel level, Type sourceType, string message) =>
-            ProcessEntry(ComposeMessage(level, sourceType, message));
+            Log(level, source.GetType(), message);
+        public void Log(LogLevel level, Type sourceType, string message) {
+            if (level >= MinLogLevel)
+                ProcessEntry(ComposeMessage(level, sourceType, message));
+        }
 
         public void V(object source, string message) => Log(LogLevel.Verbose, source, message);
         public void V(Type sourceType, string message) => Log(LogLevel.Verbose, sourceType, message);
