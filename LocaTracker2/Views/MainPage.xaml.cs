@@ -273,8 +273,11 @@ namespace LocaTracker2.Views
         {
             if (GpsRecorder.Instance.IsRecording)
             {
-                Task.Run(() => {
+                Task.Run(async () => {
                     GpsRecorder.Instance.EndRecording();
+                    await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
+                        SetRecordingState(false, RecordingPausedReason.WasNot);
+                    });
                 });
             } else {
                 RecordButton.IsEnabled = false;
@@ -291,6 +294,7 @@ namespace LocaTracker2.Views
                         await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
                             RecordButton.IsEnabled = true;
                             SetDistance(GpsRecorder.Instance.CurrentTripDistance);
+                            SetRecordingState(true, RecordingPausedReason.WasNot);
                         });
                     }
                 });
