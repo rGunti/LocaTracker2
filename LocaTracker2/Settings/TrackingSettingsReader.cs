@@ -9,8 +9,8 @@ namespace LocaTracker2.Settings
 {
     public class TrackingSettingsReader : SettingsReader<TrackingSettingsReader>
     {
-        private const string KEY_WARNING_ENABLED = "LOCATRACKER2.TRACKING.WarningEnabled";
-        private const string KEY_WARNING_SPEED = "LOCATRACKER2.TRACKING.WarningSpeed";
+        public const string KEY_WARNING_ENABLED = "LOCATRACKER2.TRACKING.WarningEnabled";
+        public const string KEY_WARNING_SPEED = "LOCATRACKER2.TRACKING.WarningSpeed";
 
         protected override void InitializeSettingsValues() {
             InitSettingsValue(KEY_WARNING_ENABLED, true);                               // Warning:       Enabled

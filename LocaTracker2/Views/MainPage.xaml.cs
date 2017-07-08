@@ -60,6 +60,8 @@ namespace LocaTracker2.Views
 
         private UnitSettingsReader unitSettings;
         private bool useImperialUnits;
+        private bool useSpeedWarning;
+        private float warningSpeed;
 
         private RotateTransform compassRotateImage;
 
@@ -89,6 +91,7 @@ namespace LocaTracker2.Views
 
             GpsRecorder.Instance.OnPositionUpdate += GpsRecorder_OnPositionUpdate;
             UnitSettingsReader.Instance.OnSettingsChanged += UnitSettingsReader_OnSettingsChanged;
+            TrackingSettingsReader.Instance.OnSettingsChanged += TrackingSettingsReader_OnSettingsChanged;
             
             unitSettings = UnitSettingsReader.Instance;
             useImperialUnits = unitSettings.UseImperialUnits;
@@ -146,11 +149,16 @@ namespace LocaTracker2.Views
 
         private void UnitSettingsReader_OnSettingsChanged(string key, object newValue)
         {
-            if (key == UnitSettingsReader.KEY_USE_IMPERIAL_UNITS)
-            {
+            if (key == UnitSettingsReader.KEY_USE_IMPERIAL_UNITS) {
                 useImperialUnits = (bool)newValue;
                 SetUnitLabels(useImperialUnits);
             }
+        }
+
+        private void TrackingSettingsReader_OnSettingsChanged(string key, object newValue)
+        {
+            if (key == TrackingSettingsReader.KEY_WARNING_ENABLED) useSpeedWarning = (bool)newValue;
+            else if (key == TrackingSettingsReader.KEY_WARNING_SPEED) warningSpeed = (float)newValue;
         }
 
         private async void BatteryTimer_Tick(object sender, object e)
@@ -271,13 +279,13 @@ namespace LocaTracker2.Views
                 Task.Run(async () => {
                     if (!GpsRecorder.Instance.StartRecording())
                     {
-                        await Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () =>
                         {
                             SetRecordingState(false, RecordingPausedReason.FailedToInitialize);
                             RecordButton.IsEnabled = true;
                         });
                     } else {
-                        await Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
+                        await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
                             RecordButton.IsEnabled = true;
                             SetDistance(GpsRecorder.Instance.CurrentTripDistance);
                         });
@@ -303,16 +311,13 @@ namespace LocaTracker2.Views
 
         public void SetSpeed(double metricValue)
         {
-            bool speedWarningEnabled = TrackingSettingsReader.Instance.SpeedWarningEnabled;
-            double warningSpeed = TrackingSettingsReader.Instance.SpeedWarningMaxSpeed;
-
             metricValue = GpsUtilities.PreventNaN(metricValue);
             double kmh = GpsUtilities.ConvertMPStoKMH(metricValue);
             double mph = GpsUtilities.MetricImperialConverter.ConvertMPStoMPH(metricValue);
             SpeedLabel.Text = $"{(useImperialUnits ? mph : kmh),3:0}";
             AlternativeUnitSpeedLabel.Text = $"{(useImperialUnits ? kmh : mph):0}";
 
-            if (speedWarningEnabled && metricValue > warningSpeed) {
+            if (useSpeedWarning && metricValue > warningSpeed) {
                 SpeedLabel.Tag = StatusIndicatorState.Warning;
                 AlternativeUnitSpeedLabel.Tag = StatusIndicatorState.Warning;
             } else {
