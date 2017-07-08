@@ -8,9 +8,9 @@ namespace LocaTracker2.Settings
 {
     public class RecordingSettingsReader : SettingsReader<RecordingSettingsReader>
     {
-        private const string KEY_MIN_SPEED = "LOCATRACKER2.RECORDING.MinSpeed";
-        private const string KEY_MAX_ACCURACY = "LOCATRACKER2.RECORDING.MaxAccuracy";
-        private const string KEY_RECORDING_TRIP = "LOCATRACKER2.RECORDING.RecordingTripID";
+        public const string KEY_MIN_SPEED = "LOCATRACKER2.RECORDING.MinSpeed";
+        public const string KEY_MAX_ACCURACY = "LOCATRACKER2.RECORDING.MaxAccuracy";
+        public const string KEY_RECORDING_TRIP = "LOCATRACKER2.RECORDING.RecordingTripID";
 
         protected override void InitializeSettingsValues()
         {

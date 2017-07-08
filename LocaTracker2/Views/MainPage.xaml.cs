@@ -61,7 +61,7 @@ namespace LocaTracker2.Views
         private UnitSettingsReader unitSettings;
         private bool useImperialUnits;
         private bool useSpeedWarning;
-        private float warningSpeed;
+        private double warningSpeed;
 
         private RotateTransform compassRotateImage;
 
@@ -95,6 +95,9 @@ namespace LocaTracker2.Views
             
             unitSettings = UnitSettingsReader.Instance;
             useImperialUnits = unitSettings.UseImperialUnits;
+
+            useSpeedWarning = TrackingSettingsReader.Instance.SpeedWarningEnabled;
+            warningSpeed = TrackingSettingsReader.Instance.SpeedWarningMaxSpeed;
 
             compassRotateImage = CompassImage.RenderTransform as RotateTransform;
 
@@ -158,7 +161,7 @@ namespace LocaTracker2.Views
         private void TrackingSettingsReader_OnSettingsChanged(string key, object newValue)
         {
             if (key == TrackingSettingsReader.KEY_WARNING_ENABLED) useSpeedWarning = (bool)newValue;
-            else if (key == TrackingSettingsReader.KEY_WARNING_SPEED) warningSpeed = (float)newValue;
+            else if (key == TrackingSettingsReader.KEY_WARNING_SPEED) warningSpeed = (double)newValue;
         }
 
         private async void BatteryTimer_Tick(object sender, object e)

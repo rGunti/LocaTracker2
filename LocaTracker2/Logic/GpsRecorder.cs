@@ -20,10 +20,30 @@ namespace LocaTracker2.Logic
 
     public class GpsRecorder : GpsTracker<GpsRecorder>
     {
+        public GpsRecorder() : base()
+        {
+            RecordingSettingsReader.Instance.OnSettingsChanged += RecordingSettings_OnSettingsChanged;
+
+            minRecordingSpeed = RecordingSettingsReader.Instance.MinSpeed;
+            maxRecordingAccuracy = RecordingSettingsReader.Instance.MaxAccuracy;
+        }
+
+        private void RecordingSettings_OnSettingsChanged(string key, object newValue)
+        {
+            switch (key) {
+                case RecordingSettingsReader.KEY_MIN_SPEED:    minRecordingSpeed = (double)newValue; break;
+                case RecordingSettingsReader.KEY_MAX_ACCURACY: maxRecordingAccuracy = (double)newValue; break;
+                default: break;
+            }
+        }
+
         public delegate void OnPositionUpdateDelegate(Point point, RecordingPausedReason recordingPausedReason);
         public event OnPositionUpdateDelegate OnPositionUpdate;
 
         public LocaTrackerDbContext dbContext;
+
+        protected double minRecordingSpeed;
+        protected double maxRecordingAccuracy;
 
         public Point CurrentPosition { get; protected set; } = null;
         public TripSection CurrentRecordingTripSection { get; protected set; }
@@ -91,10 +111,9 @@ namespace LocaTracker2.Logic
 
             Point point = GpsModelExtension.GetPointFromGpsTracker(args.Position.Coordinate);
             RecordingPausedReason reason = RecordingPausedReason.WasNot;
-            double minSpeed = RecordingSettingsReader.Instance.MinSpeed;
 
-            bool doRecording = IsRecording && point.Accuracy <= RecordingSettingsReader.Instance.MaxAccuracy;
-            if (doRecording && point.Speed < minSpeed && CurrentPosition.Speed < minSpeed) doRecording = false;
+            bool doRecording = IsRecording && point.Accuracy <= maxRecordingAccuracy;
+            if (doRecording && point.Speed < minRecordingSpeed && CurrentPosition.Speed < minRecordingSpeed) doRecording = false;
 
             if (doRecording)
             {
@@ -109,7 +128,7 @@ namespace LocaTracker2.Logic
                 point.TripSectionID = CurrentRecordingTripSection.TripSectionID;
                 dbContext.Add(point);
                 dbContext.SaveChanges();
-            } else if (point.Speed < minSpeed) {
+            } else if (point.Speed < minRecordingSpeed) {
                 reason = RecordingPausedReason.LowSpeed;
             } else if (point.Accuracy > RecordingSettingsReader.Instance.MaxAccuracy) {
                 reason = RecordingPausedReason.LowAccuracy;
