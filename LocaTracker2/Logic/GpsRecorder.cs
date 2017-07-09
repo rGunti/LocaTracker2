@@ -60,7 +60,8 @@ namespace LocaTracker2.Logic
 
             dbContext = LocaTrackerDbContext.GetNonTrackingInstance();
 
-            CurrentRecordingTrip = dbContext.Trips.FirstOrDefault(t => t.TripID == RecordingSettingsReader.Instance.RecordingTripID);
+            int tripID = RecordingSettingsReader.Instance.RecordingTripID;
+            CurrentRecordingTrip = dbContext.Trips.FirstOrDefault(t => t.TripID == tripID);
             if (CurrentRecordingTrip == null) {
                 StorageFileLogger.Instance.E(this, $"The selected trip with ID {RecordingSettingsReader.Instance.RecordingTripID} could not be found! Recording aborted!");
                 return false;
@@ -115,8 +116,8 @@ namespace LocaTracker2.Logic
             bool doRecording = IsRecording && point.Accuracy <= maxRecordingAccuracy;
             if (doRecording && point.Speed < minRecordingSpeed && CurrentPosition.Speed < minRecordingSpeed) doRecording = false;
 
-            if (doRecording)
-            {
+            if (doRecording) {
+                int tripSectionID = CurrentRecordingTripSection.TripSectionID;
                 if (CurrentPosition != null) {
                     double delta = GpsUtilities.GetDistanceBetweenTwoPoints(
                         CurrentPosition.Latitude, CurrentPosition.Longitude,
@@ -125,7 +126,7 @@ namespace LocaTracker2.Logic
                     CurrentTripSectionDistance += delta;
                     CurrentTripDistance += delta;
                 }
-                point.TripSectionID = CurrentRecordingTripSection.TripSectionID;
+                point.TripSectionID = tripSectionID;
                 dbContext.Add(point);
                 dbContext.SaveChanges();
             } else if (point.Speed < minRecordingSpeed) {

@@ -222,6 +222,8 @@ namespace LocaTracker2.Views
                 SetAccuracy(point.Accuracy);
                 SetHeading(point.Heading);
 
+                SetDistance(GpsRecorder.Instance.CurrentTripDistance);
+
                 SetRecordingState(GpsRecorder.Instance.IsRecording, recordingPausedReason);
             });
         }
@@ -345,12 +347,15 @@ namespace LocaTracker2.Views
 
         public void SetDistance(double metricValue)
         {
-            double displayValue = metricValue / 1000;
-            if (useImperialUnits)
-            {
-                displayValue = GpsUtilities.MetricImperialConverter.ConvertKMtoMile(metricValue);
+            if (double.IsNaN(metricValue)) {
+                DistanceLabel.Text = $"---.-";
+            } else {
+                double displayValue = metricValue / 1000;
+                if (useImperialUnits) {
+                    displayValue = GpsUtilities.MetricImperialConverter.ConvertKMtoMile(displayValue);
+                }
+                DistanceLabel.Text = $"{displayValue:0.0}";
             }
-            DistanceLabel.Text = $"{displayValue:0.0}";
             lsv_distance = DistanceLabel.Text;
         }
 
@@ -446,7 +451,7 @@ namespace LocaTracker2.Views
         {
             if (!double.IsNaN(heading)) {
                 compassRotateImage.Angle = 360 - heading;
-                CompassLabel.Text = $"{heading,-3:0}";
+                CompassLabel.Text = $"{(heading < 0 ? 360 + heading : heading),3:0}";
             } else {
                 compassRotateImage.Angle = 0;
                 CompassLabel.Text = "---";
