@@ -446,7 +446,7 @@ namespace LocaTracker2.Views
         {
             if (!double.IsNaN(heading)) {
                 compassRotateImage.Angle = 360 - heading;
-                CompassLabel.Text = $"{heading,-3}";
+                CompassLabel.Text = $"{heading,-3:0}";
             } else {
                 compassRotateImage.Angle = 0;
                 CompassLabel.Text = "---";
