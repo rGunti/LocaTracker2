@@ -132,7 +132,7 @@ namespace LocaTracker2.Logic
             RecordingPausedReason reason = RecordingPausedReason.WasNot;
 
             bool doRecording = IsRecording && point.Accuracy <= maxRecordingAccuracy;
-            if (doRecording && point.Speed < minRecordingSpeed && CurrentPosition.Speed < minRecordingSpeed) doRecording = false;
+            if (doRecording && point.Speed < minRecordingSpeed && (CurrentPosition == null || CurrentPosition.Speed < minRecordingSpeed)) doRecording = false;
 
             if (doRecording) {
                 int tripSectionID = CurrentRecordingTripSection.TripSectionID;
