@@ -48,6 +48,21 @@
                              Loading="WarnSpeedTextBox_Loading"
                              LostFocus="WarnSpeedTextBox_LostFocus"
                              />
+
+                    <TextBlock Text="Location Info" />
+                    <TextBlock FontSize="12">
+                        When enabled, the app displays information about the current location.
+                    </TextBlock>
+                    <ToggleSwitch x:Name="LocationUpdateEnabledToggleSwitch"
+                                  Loading="LocationUpdateEnabledToggleSwitch_Loading"
+                                  LostFocus="LocationUpdateEnabledToggleSwitch_LostFocus"
+                                  />
+                    <TextBox x:Name="LocationUpdateIntervalTextBox"
+                             Header="Location Update Interval in [sec]"
+                             InputScope="Number"
+                             Loading="LocationUpdateIntervalTextBox_Loading"
+                             LostFocus="LocationUpdateIntervalTextBox_LostFocus"
+                             />
                 </StackPanel>
             </PivotItem>
             <PivotItem Header="Recording Settings">

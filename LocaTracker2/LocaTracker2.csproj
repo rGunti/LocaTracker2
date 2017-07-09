@@ -97,6 +97,7 @@
     <Content Include="Assets\BadgeLogo.scale-400.png" />
     <Content Include="Assets\Compass\compass.png" />
     <Content Include="Assets\Fonts\DigitalCounter7.ttf" />
+    <Content Include="Assets\Fonts\scoreboard.ttf" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>

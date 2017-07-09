@@ -9,6 +9,7 @@ using System;
 using System.Diagnostics.Tracing;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Services.Maps;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -52,6 +53,8 @@ namespace LocaTracker2
             StorageFileLogger.Instance.I(this, "Setting up Device Systems...");
             BatteryDataFetcher.Initialize();
             GpsRecorder.Instance.InitAsync();
+            
+            MapService.ServiceToken = "dDDLbMeVTt8s6bdAKKYR~1BTmDY8_WVm_gjqpUzJmJw~AiwgGhPDKkuxXQkQtfTN8fuZpZhYaxu-mrINqaTNn31M_qKiSXGgJtVjW88caXve";
         }
 
         private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)

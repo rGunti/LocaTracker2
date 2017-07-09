@@ -1,4 +1,5 @@
 ﻿using LocaTracker2.Battery;
+using LocaTracker2.Db.Objects;
 using LocaTracker2.Gps;
 using LocaTracker2.Logging;
 using LocaTracker2.Logging.ETW;
@@ -7,6 +8,8 @@ using LocaTracker2.Settings;
 using LocaTracker2.Views.Dialogs;
 using System;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
+using Windows.Services.Maps;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -53,7 +56,11 @@ namespace LocaTracker2.Views
             lsv_distance = "0.0",
             lsv_localTime = "--:--:--",
             lsv_utcTime = "--:--:--",
-            lsv_accuracy = "0"
+            lsv_accuracy = "0",
+
+            lsv_location1 = "-",
+            lsv_location2 = "-",
+            lsv_locationStatus = ""
         ;
 
         private DateTime initializedTimeStamp;
@@ -62,6 +69,7 @@ namespace LocaTracker2.Views
         private bool useImperialUnits;
         private bool useSpeedWarning;
         private double warningSpeed;
+        private bool useLocationInfo;
 
         private RotateTransform compassRotateImage;
 
@@ -98,6 +106,7 @@ namespace LocaTracker2.Views
 
             useSpeedWarning = TrackingSettingsReader.Instance.SpeedWarningEnabled;
             warningSpeed = TrackingSettingsReader.Instance.SpeedWarningMaxSpeed;
+            useLocationInfo = TrackingSettingsReader.Instance.ShowLocationInfo;
 
             compassRotateImage = CompassImage.RenderTransform as RotateTransform;
 
@@ -146,6 +155,10 @@ namespace LocaTracker2.Views
             AltitudeLabel.Text = lsv_altitude;
             DistanceLabel.Text = lsv_distance;
 
+            LocationLine1Label.Text = lsv_location1;
+            LocationLine2Label.Text = lsv_location2;
+            LocationStatusLabel.Text = lsv_locationStatus;
+
             SetTime(DateTime.UtcNow);
             SetBatteryReport();
         }
@@ -162,6 +175,7 @@ namespace LocaTracker2.Views
         {
             if (key == TrackingSettingsReader.KEY_WARNING_ENABLED) useSpeedWarning = (bool)newValue;
             else if (key == TrackingSettingsReader.KEY_WARNING_SPEED) warningSpeed = (double)newValue;
+            else if (key == TrackingSettingsReader.KEY_LOCATION_INFO) useLocationInfo = (bool)newValue;
         }
 
         private async void BatteryTimer_Tick(object sender, object e)
@@ -223,6 +237,12 @@ namespace LocaTracker2.Views
                 SetHeading(point.Heading);
 
                 SetDistance(GpsRecorder.Instance.CurrentTripDistance);
+
+                SetLocation(
+                    point,
+                    GpsRecorder.Instance.CurrentLocationInfo,
+                    GpsRecorder.Instance.CurrentLocationFinderStatus
+                );
 
                 SetRecordingState(GpsRecorder.Instance.IsRecording, recordingPausedReason);
             });
@@ -456,6 +476,31 @@ namespace LocaTracker2.Views
                 compassRotateImage.Angle = 0;
                 CompassLabel.Text = "---";
             }
+        }
+
+        public void SetLocation(Point point, MapLocation location, MapLocationFinderStatus status = MapLocationFinderStatus.Success)
+        {
+            if (!useLocationInfo || location == null) {
+                LocationLine1Label.Text = GpsUtilities.CoordinateConverter.StringifyLatitude(point.Latitude, true);
+                LocationLine2Label.Text = GpsUtilities.CoordinateConverter.StringifyLongitude(point.Longitude, true);
+
+                string statusString = "";
+                if (!useLocationInfo) statusString = "OFF";
+                else if (status == MapLocationFinderStatus.NetworkFailure) statusString = "Offline";
+                else if (status == MapLocationFinderStatus.BadLocation || status == MapLocationFinderStatus.IndexFailure) statusString = "No Data";
+                else statusString = "-";
+
+                LocationStatusLabel.Text = statusString;
+            } else {
+                var address = location.Address;
+                LocationLine1Label.Text = $"{address.Street}";
+                LocationLine2Label.Text = $"{address.Town}, {address.Country}";
+                LocationStatusLabel.Text = $"{GpsRecorder.Instance.LocationInfoUpdatedUtc:HH:mm:ss}";
+            }
+
+            lsv_location1 = LocationLine1Label.Text;
+            lsv_location2 = LocationLine2Label.Text;
+            lsv_locationStatus = LocationStatusLabel.Text;
         }
         #endregion UI Data Modification Methods
     }

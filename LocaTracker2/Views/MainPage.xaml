@@ -52,7 +52,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="90" />
             <RowDefinition />
-            <RowDefinition Height="80" />
+            <RowDefinition Height="120" />
         </Grid.RowDefinitions>
 
         <!-- CENTER -->
@@ -86,7 +86,7 @@
                                Text="km/h"
                                VerticalAlignment="Top"
                                TextAlignment="Right"
-                               FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
+                               FontFamily="/Assets/Fonts/scoreboard.ttf#Score Board"
                                FontSize="50"
                                />
 
@@ -105,7 +105,7 @@
                                Text="mph"
                                VerticalAlignment="Bottom"
                                TextAlignment="Right"
-                               FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
+                               FontFamily="/Assets/Fonts/scoreboard.ttf#Score Board"
                                FontSize="20"
                                />
                 </Grid>
@@ -174,7 +174,7 @@
                        Grid.Row="1"
                        Text="m"
                        TextAlignment="Right"
-                       FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
+                       FontFamily="/Assets/Fonts/scoreboard.ttf#Score Board"
                        FontSize="25"
                        />
 
@@ -200,7 +200,7 @@
                        Grid.Row="1"
                        Text="km"
                        TextAlignment="Right"
-                       FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
+                       FontFamily="/Assets/Fonts/scoreboard.ttf#Score Board"
                        FontSize="25"
                        />
         </Grid>
@@ -211,11 +211,13 @@
               Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="15*" />
-                <ColumnDefinition Width="10*" />
+                <ColumnDefinition Width="6*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="10*" />
                 <RowDefinition Height="13*" />
+                <RowDefinition Height="7*" />
+                <RowDefinition Height="7*" />
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Column="0"
@@ -248,6 +250,32 @@
                        FontFamily="/Assets/Fonts/DigitalCounter7.ttf#Digital Counter 7"
                        FontSize="30"
                        VerticalAlignment="Center"
+                       />
+
+            <TextBlock x:Name="LocationLine1Label"
+                       Grid.Row="2"
+                       Grid.Column="0"
+                       Text="---"
+                       TextAlignment="Left"
+                       FontFamily="/Assets/Fonts/scoreboard.ttf#Score Board"
+                       FontSize="20"
+                       />
+            <TextBlock x:Name="LocationStatusLabel"
+                       Grid.Row="2"
+                       Grid.Column="1"
+                       Text="offline"
+                       TextAlignment="Right"
+                       FontFamily="/Assets/Fonts/scoreboard.ttf#Score Board"
+                       FontSize="20"
+                       />
+            <TextBlock x:Name="LocationLine2Label"
+                       Grid.Row="3"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       Text="---"
+                       TextAlignment="Left"
+                       FontFamily="/Assets/Fonts/scoreboard.ttf#Score Board"
+                       FontSize="20"
                        />
         </Grid>
     </Grid>

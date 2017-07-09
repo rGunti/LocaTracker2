@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
+using Windows.Services.Maps;
 
 namespace LocaTracker2.Logic
 {
@@ -22,17 +23,26 @@ namespace LocaTracker2.Logic
     {
         public GpsRecorder() : base()
         {
-            RecordingSettingsReader.Instance.OnSettingsChanged += RecordingSettings_OnSettingsChanged;
+            RecordingSettingsReader.Instance.OnSettingsChanged += OnSettingsChanged;
+            TrackingSettingsReader.Instance.OnSettingsChanged += OnSettingsChanged;
 
             minRecordingSpeed = RecordingSettingsReader.Instance.MinSpeed;
             maxRecordingAccuracy = RecordingSettingsReader.Instance.MaxAccuracy;
+            getLocationInfo = TrackingSettingsReader.Instance.ShowLocationInfo;
+            getLocationInterval = TrackingSettingsReader.Instance.LocationUpdateInterval;
+            getLocationRetries = TrackingSettingsReader.Instance.LocationUpdateRetries;
+            getLocationRetryInterval = TrackingSettingsReader.Instance.LocationUpdateRetryInterval;
         }
 
-        private void RecordingSettings_OnSettingsChanged(string key, object newValue)
+        private void OnSettingsChanged(string key, object newValue)
         {
             switch (key) {
-                case RecordingSettingsReader.KEY_MIN_SPEED:    minRecordingSpeed = (double)newValue; break;
-                case RecordingSettingsReader.KEY_MAX_ACCURACY: maxRecordingAccuracy = (double)newValue; break;
+                case RecordingSettingsReader.KEY_MIN_SPEED:                     minRecordingSpeed = (double)newValue; break;
+                case RecordingSettingsReader.KEY_MAX_ACCURACY:                  maxRecordingAccuracy = (double)newValue; break;
+                case TrackingSettingsReader.KEY_LOCATION_INFO:                  getLocationInfo = (bool)newValue; break;
+                case TrackingSettingsReader.KEY_LOCATION_UPDATE_INTERVAL:       getLocationInterval = (int)newValue; break;
+                case TrackingSettingsReader.KEY_LOCATION_UPDATE_RETRIES:        getLocationRetries = (int)newValue; break;
+                case TrackingSettingsReader.KEY_LOCATION_UPDATE_RETRY_INTERVAL: getLocationRetryInterval = (int)newValue; break;
                 default: break;
             }
         }
@@ -44,6 +54,10 @@ namespace LocaTracker2.Logic
 
         protected double minRecordingSpeed;
         protected double maxRecordingAccuracy;
+        protected bool getLocationInfo;
+        protected int getLocationInterval;
+        protected int getLocationRetries;
+        protected int getLocationRetryInterval;
 
         public Point CurrentPosition { get; protected set; } = null;
         public TripSection CurrentRecordingTripSection { get; protected set; }
@@ -51,6 +65,10 @@ namespace LocaTracker2.Logic
 
         public double CurrentTripDistance { get; protected set; }
         public double CurrentTripSectionDistance { get; protected set; }
+
+        public DateTime LocationInfoUpdatedUtc { get; protected set; } = DateTime.MinValue;
+        public MapLocation CurrentLocationInfo { get; protected set; }
+        public MapLocationFinderStatus CurrentLocationFinderStatus { get; protected set; } = MapLocationFinderStatus.UnknownError;
 
         public bool IsRecording { get; protected set; } = false;
 
@@ -135,12 +153,51 @@ namespace LocaTracker2.Logic
                 reason = RecordingPausedReason.LowAccuracy;
             }
 
+            if (getLocationInfo && DateTime.UtcNow - LocationInfoUpdatedUtc > TimeSpan.FromSeconds(getLocationInterval)) {
+                GetLocationInfo(point);
+            }
+
             CurrentPosition = point;
             OnPositionUpdate?.Invoke(point, reason);
         }
 
         protected override void Locator_StatusChanged(Geolocator sender, StatusChangedEventArgs args)
         { }
+
+        protected async void GetLocationInfo(Point point)
+        {
+            Geopoint geoPoint = new Geopoint(
+                new BasicGeoposition() {
+                    Latitude = point.Latitude,
+                    Longitude = point.Longitude
+                }
+            );
+            GetLocationInfo(geoPoint, getLocationRetries);
+        }
+
+        private async void GetLocationInfo(Geopoint point, int retries)
+        {
+            StorageFileLogger.Instance.D(this, "Getting new location...");
+            var result = await MapLocationFinder.FindLocationsAtAsync(point);
+            if (result.Status == MapLocationFinderStatus.NetworkFailure) {
+                if (retries > 0) {
+                    await Task.Delay(getLocationRetryInterval * 1000);
+                    GetLocationInfo(point, retries - 1);
+                } else {
+                    CurrentLocationInfo = null;
+                }
+            } else if (result.Status == MapLocationFinderStatus.Success) {
+                if (result.Locations.Count == 0) {
+                    CurrentLocationInfo = null;
+                } else {
+                    CurrentLocationInfo = result.Locations[0];
+                    LocationInfoUpdatedUtc = DateTime.UtcNow;
+                }
+            } else {
+                CurrentLocationInfo = null;
+            }
+            CurrentLocationFinderStatus = result.Status;
+        }
     }
 
     public static class GpsModelExtension

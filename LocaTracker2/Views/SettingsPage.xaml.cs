@@ -184,5 +184,30 @@ namespace LocaTracker2.Views
             var version = Package.Current.Id.Version;
             ((TextBlock)sender).Text = $"Version {version.Major}.{version.Minor}.{version.Revision}.{version.Build}";
         }
+
+        private void LocationUpdateEnabledToggleSwitch_Loading(FrameworkElement sender, object args)
+        {
+            ((ToggleSwitch)sender).IsOn = TrackingSettingsReader.Instance.ShowLocationInfo;
+        }
+
+        private void LocationUpdateEnabledToggleSwitch_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TrackingSettingsReader.Instance.ShowLocationInfo = ((ToggleSwitch)sender).IsOn;
+        }
+
+        private void LocationUpdateIntervalTextBox_Loading(FrameworkElement sender, object args)
+        {
+            ((TextBox)sender).Text = TrackingSettingsReader.Instance.LocationUpdateInterval.ToString();
+        }
+
+        private void LocationUpdateIntervalTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            int value;
+            if (int.TryParse(((TextBox)sender).Text, out value)) {
+                TrackingSettingsReader.Instance.LocationUpdateInterval = value;
+            } else {
+                LocationUpdateIntervalTextBox_Loading(sender as FrameworkElement, null);
+            }
+        }
     }
 }
