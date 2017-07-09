@@ -52,7 +52,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="90" />
             <RowDefinition />
-            <RowDefinition Height="120" />
+            <RowDefinition Height="160" />
         </Grid.RowDefinitions>
 
         <!-- CENTER -->
@@ -216,7 +216,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="10*" />
                 <RowDefinition Height="13*" />
-                <RowDefinition Height="7*" />
+                <RowDefinition Height="14*" />
                 <RowDefinition Height="7*" />
             </Grid.RowDefinitions>
 
@@ -255,24 +255,19 @@
             <TextBlock x:Name="LocationLine1Label"
                        Grid.Row="2"
                        Grid.Column="0"
-                       Text="---"
+                       Grid.ColumnSpan="2"
+                       Text="-"
                        TextAlignment="Left"
                        FontFamily="/Assets/Fonts/scoreboard.ttf#Score Board"
                        FontSize="20"
-                       />
-            <TextBlock x:Name="LocationStatusLabel"
-                       Grid.Row="2"
-                       Grid.Column="1"
-                       Text="offline"
-                       TextAlignment="Right"
-                       FontFamily="/Assets/Fonts/scoreboard.ttf#Score Board"
-                       FontSize="20"
+                       TextWrapping="Wrap"
+                       Height="50"
                        />
             <TextBlock x:Name="LocationLine2Label"
                        Grid.Row="3"
                        Grid.Column="0"
                        Grid.ColumnSpan="2"
-                       Text="---"
+                       Text="-"
                        TextAlignment="Left"
                        FontFamily="/Assets/Fonts/scoreboard.ttf#Score Board"
                        FontSize="20"

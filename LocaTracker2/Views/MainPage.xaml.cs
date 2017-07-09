@@ -59,8 +59,7 @@ namespace LocaTracker2.Views
             lsv_accuracy = "0",
 
             lsv_location1 = "-",
-            lsv_location2 = "-",
-            lsv_locationStatus = ""
+            lsv_location2 = "-"
         ;
 
         private DateTime initializedTimeStamp;
@@ -157,7 +156,6 @@ namespace LocaTracker2.Views
 
             LocationLine1Label.Text = lsv_location1;
             LocationLine2Label.Text = lsv_location2;
-            LocationStatusLabel.Text = lsv_locationStatus;
 
             SetTime(DateTime.UtcNow);
             SetBatteryReport();
@@ -484,23 +482,19 @@ namespace LocaTracker2.Views
                 LocationLine1Label.Text = GpsUtilities.CoordinateConverter.StringifyLatitude(point.Latitude, true);
                 LocationLine2Label.Text = GpsUtilities.CoordinateConverter.StringifyLongitude(point.Longitude, true);
 
-                string statusString = "";
-                if (!useLocationInfo) statusString = "OFF";
-                else if (status == MapLocationFinderStatus.NetworkFailure) statusString = "Offline";
-                else if (status == MapLocationFinderStatus.BadLocation || status == MapLocationFinderStatus.IndexFailure) statusString = "No Data";
-                else statusString = "-";
-
-                LocationStatusLabel.Text = statusString;
+                //string statusString = "";
+                //if (!useLocationInfo) statusString = "OFF";
+                //else if (status == MapLocationFinderStatus.NetworkFailure) statusString = "Offline";
+                //else if (status == MapLocationFinderStatus.BadLocation || status == MapLocationFinderStatus.IndexFailure) statusString = "No Data";
+                //else statusString = "-";
             } else {
                 var address = location.Address;
                 LocationLine1Label.Text = $"{address.Street}";
                 LocationLine2Label.Text = $"{address.Town}, {address.Country}";
-                LocationStatusLabel.Text = $"{GpsRecorder.Instance.LocationInfoUpdatedUtc:HH:mm:ss}";
             }
 
             lsv_location1 = LocationLine1Label.Text;
             lsv_location2 = LocationLine2Label.Text;
-            lsv_locationStatus = LocationStatusLabel.Text;
         }
         #endregion UI Data Modification Methods
     }
