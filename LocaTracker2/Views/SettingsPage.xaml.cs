@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -208,6 +209,11 @@ namespace LocaTracker2.Views
             } else {
                 LocationUpdateIntervalTextBox_Loading(sender as FrameworkElement, null);
             }
+        }
+
+        private async void OfflineMapsLink_Clicked(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            await Launcher.LaunchUriAsync(new Uri("ms-settings:maps"));
         }
     }
 }

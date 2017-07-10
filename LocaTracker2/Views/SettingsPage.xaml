@@ -50,7 +50,7 @@
                              />
 
                     <TextBlock Text="Location Info" />
-                    <TextBlock FontSize="12">
+                    <TextBlock FontSize="12" TextWrapping="WrapWholeWords">
                         When enabled, the app displays information about the current location.
                     </TextBlock>
                     <ToggleSwitch x:Name="LocationUpdateEnabledToggleSwitch"
@@ -63,6 +63,10 @@
                              Loading="LocationUpdateIntervalTextBox_Loading"
                              LostFocus="LocationUpdateIntervalTextBox_LostFocus"
                              />
+                    <TextBlock FontSize="12" TextWrapping="WrapWholeWords" >    
+                        Note that the app can make use of your offline stored maps so you don't have to rely
+                        on your mobile data connection. <Hyperlink Click="OfflineMapsLink_Clicked">Show more about your offline maps</Hyperlink>
+                    </TextBlock>
                 </StackPanel>
             </PivotItem>
             <PivotItem Header="Recording Settings">
