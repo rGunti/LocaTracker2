@@ -20,8 +20,8 @@ namespace LocaTracker2.Settings
             InitSettingsValue(KEY_WARNING_ENABLED, true);                               // Warning:                 Enabled
             InitSettingsValue(KEY_WARNING_SPEED, GpsUtilities.ConvertKMHtoMPS(135));    // Warning Speed:           135 km/h
             InitSettingsValue(KEY_LOCATION_INFO, true);                                 // Location Info:           Enabled
-            InitSettingsValue(KEY_LOCATION_UPDATE_INTERVAL, 60);                        // Loc.Info Interval:       60 sec
-            InitSettingsValue(KEY_LOCATION_UPDATE_RETRIES, 5);                          // Loc.Info Retries:        5
+            InitSettingsValue(KEY_LOCATION_UPDATE_INTERVAL, 5);                         // Loc.Info Interval:       5 sec
+            InitSettingsValue(KEY_LOCATION_UPDATE_RETRIES, 1);                          // Loc.Info Retries:        1
             InitSettingsValue(KEY_LOCATION_UPDATE_RETRY_INTERVAL, 5);                   // Loc.Info Retry Interval: 5 sec
         }
 
