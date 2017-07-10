@@ -202,6 +202,9 @@ namespace LocaTracker2.Logic
 
     public static class GpsModelExtension
     {
+        public const double UNKNOWN_HEADING = -361;
+        public const double UNKNOWN_ALTITUDE = -9999;
+
         public static Point GetPointFromGpsTracker(Geocoordinate coord)
         {
             return new Point()
@@ -209,11 +212,11 @@ namespace LocaTracker2.Logic
                 Timestamp = DateTime.UtcNow,
                 Latitude = coord.Point.Position.Latitude,
                 Longitude = coord.Point.Position.Longitude,
-                Altitude = coord.Point.Position.Altitude,
+                Altitude = GpsUtilities.PreventNaN(coord.Point.Position.Altitude, -9999),
                 Speed = GpsUtilities.ConvertNullableToNormal(coord.Speed),
                 Accuracy = coord.Accuracy,
                 AltitudeAccuracy = GpsUtilities.ConvertNullableToNormal(coord.AltitudeAccuracy),
-                Heading = GpsUtilities.ConvertNullableToNormal(coord.Heading, double.NaN)
+                Heading = GpsUtilities.ConvertNullableToNormal(coord.Heading, UNKNOWN_HEADING)
             };
         }
     }

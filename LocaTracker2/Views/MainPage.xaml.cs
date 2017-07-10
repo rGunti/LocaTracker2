@@ -355,12 +355,16 @@ namespace LocaTracker2.Views
 
         public void SetAltitude(double metricValue)
         {
-            double displayValue = metricValue;
-            if (useImperialUnits)
-            {
-                displayValue = GpsUtilities.MetricImperialConverter.ConvertMeterToFeet(metricValue);
+            if (metricValue == GpsModelExtension.UNKNOWN_ALTITUDE) {
+                AltitudeLabel.Text = "-----";
+            } else {
+                double displayValue = metricValue;
+                if (useImperialUnits) {
+                    displayValue = GpsUtilities.MetricImperialConverter.ConvertMeterToFeet(metricValue);
+                }
+                AltitudeLabel.Text = $"{displayValue:0}";
             }
-            AltitudeLabel.Text = $"{displayValue:0}";
+            lsv_altitude = AltitudeLabel.Text;
         }
 
         public void SetDistance(double metricValue)
@@ -467,7 +471,7 @@ namespace LocaTracker2.Views
 
         public void SetHeading(double heading)
         {
-            if (!double.IsNaN(heading)) {
+            if (!double.IsNaN(heading) && heading != GpsModelExtension.UNKNOWN_HEADING) {
                 compassRotateImage.Angle = 360 - heading;
                 CompassLabel.Text = $"{(heading < 0 ? 360 + heading : heading),3:0}";
             } else {
