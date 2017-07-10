@@ -1,5 +1,7 @@
 ﻿using LocaTracker2.Db;
 using LocaTracker2.Db.Objects;
+using LocaTracker2.Exchange.Export;
+using LocaTracker2.Logging;
 using LocaTracker2.Settings;
 using LocaTracker2.Views.Dialogs;
 using System;
@@ -11,8 +13,11 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -132,6 +137,54 @@ namespace LocaTracker2.Views
         {
             RecordingSettingsReader.Instance.RecordingTripID = editorTrip.TripID;
             Frame.Navigate(typeof(TripListPage));
+        }
+
+        private async void RunExporter(BaseExporter exporter, StorageFile file)
+        {
+            StorageFileLogger.Instance.I(this, $"Starting Import: {exporter.GetType().Name}");
+            var processingDialog = new ProcessingDialog();
+            processingDialog.ShowAsync();
+            await Task.Run(async () => {
+                await exporter.DoExport(file, editorTrip);
+
+                string resultMessage;
+                if (exporter.Result == ExportResult.Success) {
+                    resultMessage = "File Export completed";
+                } else if (exporter.ErrorCauseByException != null) {
+                    resultMessage = LoggingUtilities.GetExceptionMessage(exporter.ErrorCauseByException);
+                } else {
+                    resultMessage = "File Export failed!";
+                }
+
+                await Dispatcher.TryRunAsync(CoreDispatcherPriority.Normal, () => {
+#pragma warning disable CS4014
+                    new MessageDialog(resultMessage, "Export").ShowAsync();
+#pragma warning restore CS4014
+                    processingDialog.Hide();
+                });
+            });
+        }
+
+        private async Task<StorageFile> RequestExportFile(string title, string fileDescription, string fileExtension)
+        {
+            var savePicker = new FileSavePicker() {
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
+                CommitButtonText = title
+            };
+            savePicker.FileTypeChoices.Add(fileDescription, new List<string>() { fileExtension });
+            return await savePicker.PickSaveFileAsync();
+        }
+
+        private async void ExportToGpxButton_Click(object sender, RoutedEventArgs e)
+        {
+            StorageFile exportFile = await RequestExportFile(
+                title: "Export to GPX",
+                fileDescription: "GPS Exchange Format File",
+                fileExtension: ".gpx"
+            );
+            if (exportFile != null) {
+                RunExporter(new GpxTripExporter(), exportFile);
+            }
         }
     }
 }

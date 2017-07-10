@@ -27,6 +27,10 @@
                           Icon="Save"
                           Click="SaveTripButton_Click"
                           />
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="ExportToGpxButton" Label="Export To GPX" Click="ExportToGpxButton_Click" />
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
 

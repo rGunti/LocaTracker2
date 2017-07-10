@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Export\BaseExporter.cs" />
+    <Compile Include="Export\GpxTripExporter.cs" />
     <Compile Include="Import\BaseImporter.cs" />
     <Compile Include="Import\LocaTracker1CsvImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
