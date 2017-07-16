@@ -38,7 +38,7 @@ namespace LocaTracker2.Db.Objects
 
         public bool IsActive { get { return !ended.HasValue; } }
         public string SectionDescription {
-            get { return $"{started.ToString("g", jpCulture)} - {(IsActive ? "..." : $"{ended.Value.ToString("g", jpCulture)}")}"; }
+            get { return $"{started.ToString("g", jpCulture)} - {(IsActive ? "..." : $"{ended.Value.ToString("t", jpCulture)}")}"; }
         }
 
         private double? sectionDistance;

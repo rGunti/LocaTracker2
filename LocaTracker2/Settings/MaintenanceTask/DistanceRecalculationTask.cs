@@ -26,6 +26,7 @@ namespace LocaTracker2.Settings.MaintenanceTask
 
                         section.CalculateSectionDistance();
                         section.StoredSectionDistance = section.SectionDistance;
+                        section.Ended = db.Points.Where(p => p.TripSectionID == section.TripSectionID).Max(p => p.Timestamp);
 
                         db.Update(section);
                     }
