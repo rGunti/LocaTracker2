@@ -22,23 +22,25 @@
     <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}">
         <Pivot Title="LocaTracker 2">
             <PivotItem Header="Trips">
-                <StackPanel>
-                    <ProgressBar x:Name="LoadingProgressBar" IsIndeterminate="True" />
-                    <ListView x:Name="TripListView"
-                    IsItemClickEnabled="True"
-                    Tapped="TripListView_Tapped"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Stretch"
-                    >
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"
-                                FontSize="20"
-                                />
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </StackPanel>
+                <ScrollViewer>
+                    <StackPanel>
+                        <ProgressBar x:Name="LoadingProgressBar" IsIndeterminate="True" />
+                        <ListView x:Name="TripListView"
+                                  IsItemClickEnabled="True"
+                                  Tapped="TripListView_Tapped"
+                                  HorizontalAlignment="Stretch"
+                                  HorizontalContentAlignment="Stretch"
+                                  >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"
+                                               FontSize="20"
+                                               />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </ScrollViewer>
             </PivotItem>
         </Pivot>
     </Grid>

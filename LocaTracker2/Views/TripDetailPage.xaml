@@ -68,45 +68,66 @@
                 </StackPanel>
             </PivotItem>
             <PivotItem Header="Sections">
-                <StackPanel>
-                    <ProgressBar x:Name="LoadingProgressBar" IsIndeterminate="True" />
-                    <ListView x:Name="TripSectionList"
+                <ScrollViewer>
+                    <StackPanel>
+                        <ProgressBar x:Name="LoadingProgressBar" IsIndeterminate="True" />
+                        <ListView x:Name="TripSectionList"
                               HorizontalContentAlignment="Stretch"
                               ScrollViewer.VerticalScrollBarVisibility="Auto"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                               DataContext="{Binding Sections}"
                               >
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid HorizontalAlignment="Stretch">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="40" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding SectionDescription}" 
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.Items>
+                                <!--
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                <obj:TripSection Started="2017-07-07 12:13:14" StoredSectionDistance="123" />
+                                -->
+                            </ListView.Items>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Stretch">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="40" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding SectionDescription}" 
                                            Grid.Row="0"
                                            Grid.RowSpan="2"
                                            TextAlignment="Left"
                                            VerticalAlignment="Center"
                                            />
-                                    <TextBlock Text="{Binding SectionDistance, Converter={StaticResource DistanceValueConverter}}"
+                                        <TextBlock Text="{Binding SectionDistance, Converter={StaticResource DistanceValueConverter}}"
                                            FontSize="10"
                                            Grid.Column="1"
                                            TextAlignment="Right"
                                            />
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </ScrollViewer>
             </PivotItem>
         </Pivot>
     </Grid>
